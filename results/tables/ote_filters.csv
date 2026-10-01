@@ -1,0 +1,11 @@
+group,filter,trades,win_rate,mean_r_net,ci95_low,ci95_high
+setups,all trades,101,0.5149,0.185,-0.0264,0.4058
+setups,S/R,44,0.6136,0.3578,-0.0104,0.6928
+setups,OTE,2,1.0,1.9857,1.1106,2.8607
+setups,S/R + OTE,2,1.0,1.9857,1.1106,2.8607
+setups,neither,57,0.4386,0.0516,-0.2764,0.38
+all incl. controls,all trades,442,0.3982,-0.0209,-0.1389,0.1011
+all incl. controls,S/R,162,0.3951,-0.0988,-0.2829,0.0942
+all incl. controls,OTE,6,0.8333,1.0845,0.3014,2.1721
+all incl. controls,S/R + OTE,4,0.75,0.9772,-0.0312,2.8607
+all incl. controls,neither,278,0.3957,0.0151,-0.1444,0.1949

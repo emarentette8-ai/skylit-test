@@ -1,0 +1,11 @@
+scope,filter,trades,win_rate,target_rate,mean_r_net,ci95_low,ci95_high
+all symbols,all OTE trades,2173,0.3792,0.1302,-0.1454,-0.204,-0.0815
+all symbols,node in zone,574,0.3659,0.1185,-0.1632,-0.2632,-0.0591
+all symbols,S/R in zone,716,0.3715,0.102,-0.1649,-0.2495,-0.0811
+all symbols,node + S/R,188,0.3564,0.0691,-0.2333,-0.378,-0.0887
+all symbols,neither,1071,0.3875,0.1447,-0.1382,-0.2217,-0.0514
+indexes,all OTE trades,138,0.4348,0.087,-0.3103,-0.5268,-0.0749
+indexes,node in zone,63,0.4603,0.0635,-0.2213,-0.5159,0.0815
+indexes,S/R in zone,48,0.4583,0.1042,-0.2783,-0.6226,0.1463
+indexes,node + S/R,18,0.6667,0.1111,0.2037,-0.3033,0.7411
+indexes,neither,45,0.4667,0.1111,-0.2635,-0.6207,0.1005
