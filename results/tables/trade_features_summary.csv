@@ -1,0 +1,19 @@
+group,feature,win_median,loss_median,win_mean,loss_mean,p_value
+rug+reverse_rug,king_dist_pct,0.0846,-0.0518,0.0773,-0.0917,0.0603
+rug+reverse_rug,king_vs_target,0.1932,-0.122,0.1795,-0.2315,0.0418
+rug+reverse_rug,king_is_level,0.0,0.0,0.3265,0.2115,0.1956
+rug+reverse_rug,level_node_pct,57.2142,60.2783,62.1144,63.5621,0.8557
+rug+reverse_rug,king_share,0.1746,0.1516,0.1984,0.1611,0.0169
+rug+reverse_rug,next_node_pct,0.0616,0.0731,0.0844,0.0874,0.3146
+rug+reverse_rug,named_nearby,10.0,10.0,9.449,10.0962,0.3303
+rug+reverse_rug,local_net_share,0.0952,0.196,0.057,0.1252,0.2551
+rug+reverse_rug,hour,12.0,11.0,12.1429,11.4423,0.0352
+all incl. controls,king_dist_pct,0.0181,0.0119,0.0352,0.0102,0.604
+all incl. controls,king_vs_target,0.0434,0.0183,0.0783,0.022,0.5682
+all incl. controls,king_is_level,0.0,0.0,0.3006,0.2832,0.6969
+all incl. controls,level_node_pct,60.1286,69.112,65.005,68.7285,0.2577
+all incl. controls,king_share,0.1595,0.1461,0.1699,0.1589,0.1224
+all incl. controls,next_node_pct,0.0644,0.068,0.081,0.0862,0.1458
+all incl. controls,named_nearby,10.0,10.0,10.5153,10.4839,0.9038
+all incl. controls,local_net_share,0.5666,0.6386,0.4823,0.5648,0.0324
+all incl. controls,hour,12.0,11.0,11.8834,11.6165,0.113

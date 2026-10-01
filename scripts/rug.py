@@ -82,7 +82,8 @@ def simulate(b, start, end, lvl, short, scale):
                     exit_px, how, exit_t = target, "target", tm[m]
                     break
             pnl = (entry - exit_px) if short else (exit_px - entry)
-            return dict(entry_time=tm[k], entry=entry, exit_time=exit_t, exit=exit_px,
+            return dict(entry_time=tm[k], entry=entry, stop=stop, target=target,
+                        exit_time=exit_t, exit=exit_px,
                         exit_how=how, r=pnl / risk, r_net=(pnl - COST * entry) / risk)
     return None
 
