@@ -1,0 +1,9 @@
+setup,confluence,trades,win_rate,mean_r_net,total_r_net
+reverse_rug,False,28,0.5,0.25,7.0006
+reverse_rug,True,19,0.6316,0.2152,4.0893
+reverse_rug_control,False,120,0.3583,-0.0816,-9.7957
+reverse_rug_control,True,70,0.2429,-0.4616,-32.3137
+rug,False,29,0.3793,-0.14,-4.0588
+rug,True,25,0.6,0.4661,11.6524
+rug_control,False,103,0.4272,0.1324,13.642
+rug_control,True,48,0.4167,0.0116,0.5587
