@@ -21,3 +21,19 @@ rates ~ ordinary strikes; no positive-vs-negative regime effect on next-hour ran
 
 Five hypotheses are tested, so a single pass at the 95% level is weak evidence on
 its own; we report all five whatever the outcome.
+
+## Result (added after the run; nothing above was changed)
+
+179 trading days, Oct 13 2025 - Jun 30 2026, 10,004 credits. Full table:
+`results/tables/oos/verdict.csv` (`scripts/oos_verdict.py`).
+
+| # | Jul-Sep 2026 | Oct 2025 - Jun 2026 | Verdict |
+|---|---|---|---|
+| H1 negative King | +0.30R (n=88), CI +0.06..+0.54 | -0.08R (n=261), CI -0.25..+0.09 | fail |
+| H2 Rug at S/R | +0.47R (n=25) | +0.05R (n=57), CI -0.34..+0.46 | fail |
+| H3 King between vs behind | +0.47R vs -0.56R | +0.02R vs +0.02R | fail |
+| H4 15:00 King pull | 47.3% vs 42.6% mirror | 44.1% vs 48.9% mirror | fail |
+| H5 Rug / Reverse Rug | +0.14R / +0.24R | -0.11R / -0.06R | fail |
+
+The expected nulls held: node touches hold about as often as ordinary strikes,
+and gamma regime does not change the next hour's range.

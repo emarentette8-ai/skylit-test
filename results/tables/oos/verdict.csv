@@ -1,0 +1,13 @@
+hypothesis,test,period,n,mean_r_net,ci95_low,ci95_high,extra,passed
+H1,"negative King, all Rug-family trades",Jul-Sep 2026,88,0.3014,0.0546,0.5367,positive King mean -0.101 (n=354),True
+H2,Rug at price S/R,Jul-Sep 2026,25,0.4661,-0.0499,0.9862,,False
+H3,"Rug+Reverse Rug, King between entry and target",Jul-Sep 2026,42,0.4704,0.0937,0.84,King behind (not the level) mean -0.559 (n=23),True
+H4,15:00 map: close ends nearer the King,Jul-Sep 2026,1516,,,,toward King 0.473 vs mirror 0.426,True
+H5,rug on SPY/QQQ/SPXW,Jul-Sep 2026,54,0.1406,-0.1985,0.5219,,False
+H5,reverse_rug on SPY/QQQ/SPXW,Jul-Sep 2026,47,0.236,-0.1486,0.6548,,False
+H1,"negative King, all Rug-family trades",Oct 2025-Jun 2026,261,-0.0783,-0.2477,0.0906,positive King mean -0.130 (n=1001),False
+H2,Rug at price S/R,Oct 2025-Jun 2026,57,0.0464,-0.3356,0.4591,,False
+H3,"Rug+Reverse Rug, King between entry and target",Oct 2025-Jun 2026,104,0.0208,-0.2365,0.2965,King behind (not the level) mean 0.022 (n=62),False
+H4,15:00 map: close ends nearer the King,Oct 2025-Jun 2026,997,,,,toward King 0.441 vs mirror 0.489,False
+H5,rug on SPY/QQQ/SPXW,Oct 2025-Jun 2026,156,-0.1136,-0.3543,0.1483,,False
+H5,reverse_rug on SPY/QQQ/SPXW,Oct 2025-Jun 2026,152,-0.0606,-0.2931,0.196,,False

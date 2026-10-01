@@ -1,0 +1,17 @@
+index,node,sign,n,hold_rate
+False,barney,-,414,0.4493
+False,gatekeeper,+,790,0.5114
+False,gatekeeper,-,519,0.5048
+False,king,+,255,0.4941
+False,king,-,178,0.4888
+False,normal,+,626,0.5192
+False,normal,-,489,0.5378
+False,pika,+,410,0.4537
+True,barney,-,365,0.4384
+True,gatekeeper,+,880,0.483
+True,gatekeeper,-,503,0.4473
+True,king,+,167,0.479
+True,king,-,95,0.4842
+True,normal,+,1080,0.4861
+True,normal,-,805,0.4609
+True,pika,+,387,0.4574
