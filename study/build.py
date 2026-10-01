@@ -246,13 +246,21 @@ def build_symbol(sym, g, p, b_override=None, want_paths=False, snap_lag=0, delay
                     i = smins.index(si) - snap_lag
                     si = smins[i] if i >= 0 else None
                 r["snap_min"] = si
-                r["eligible"] = float(si is not None and (kind == "placebo" or
-                                      np.isclose(snaps[si]["strike"], K).any()))
+                # eligibility uses only strikes LISTED in the snapshot available at tau:
+                # a real K must be listed; a placebo level needs both neighbours listed.
+                if si is None:
+                    ok = False
+                elif kind == "real":
+                    ok = bool(np.isclose(snaps[si]["strike"], K).any())
+                else:
+                    ok = bool(np.isclose(placebo_levels(snaps[si]["strike"]), K).any())
+                r["eligible"] = float(ok)
                 if typ == "entry":
                     f = price_features(a, te, s, x[te, k])
                     f["f_n_prior"] = n
-                    f["f_round5"] = float(np.isclose((K / spacing(real)) % 5, 0))
-                    f["f_round10"] = float(np.isclose((K / spacing(real)) % 10, 0))
+                    sp = spacing(snaps[si]["strike"]) if si is not None else spacing(real)
+                    f["f_round5"] = float(np.isclose((K / sp) % 5, 0))
+                    f["f_round10"] = float(np.isclose((K / sp) % 10, 0))
                     if si is not None:
                         prev = smins[smins.index(si) - 1] if smins.index(si) > 0 else None
                         f.update(gamma_features(snaps[si], snaps.get(prev), K, c[te], s))

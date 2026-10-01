@@ -22,8 +22,8 @@ def test_features_identical_on_truncated_data(data, sym):
     days = sorted(p[p.symbol == sym].date.unique())[::8]      # 8 spread-out days
     g, p = g[g.date.isin(days)], p[p.date.isin(days)]
     ev = build.build_symbol(sym, g, p)
-    ev = ev[(ev.event == "entry") & (ev.level == "real") & ev.snap_min.notna()]
-    assert len(ev) > 50
+    ev = ev[(ev.event == "entry") & (ev.eligible == 1)]
+    assert len(ev) > 50 and set(ev.level) == {"real", "placebo"}
     rng = np.random.default_rng(0)
     for _, r in ev.iloc[rng.choice(len(ev), 60, replace=False)].iterrows():
         pday = p[(p.symbol == sym) & (p.date == r.date)]
@@ -40,6 +40,12 @@ def test_features_identical_on_truncated_data(data, sym):
         assert si == r.snap_min and si <= r.tau
         prev = snaps[sm[-2]] if len(sm) > 1 else None
         f.update(build.gamma_features(snaps[si], prev, r.K, a["close"][r.t_entry_bar], r.s))
+        sp = build.spacing(snaps[si]["strike"])
+        f["f_round5"] = float(np.isclose((r.K / sp) % 5, 0))
+        f["f_round10"] = float(np.isclose((r.K / sp) % 10, 0))
+        # eligibility itself only needs the snapshot at tau
+        listed = snaps[si]["strike"] if r.level == "real" else build.placebo_levels(snaps[si]["strike"])
+        assert np.isclose(listed, r.K).any()
         for k, v in f.items():
             assert np.isclose(v, r[k], equal_nan=True), (k, v, r[k])
 

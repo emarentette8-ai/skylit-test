@@ -114,7 +114,7 @@ M2 = M1 + ["f_loc_share", "f_reg_net", "f_reg_gross", "f_reg_cancel", "f_node_ki
 M3 = M2 + ["f_ahead0.1", "f_behind0.1", "f_asym0.1", "f_ahead0.2", "f_behind0.2", "f_asym0.2",
            "f_king_dist", "f_king_sign", "f_king_is_K", "i_king", "i_asym_dist"]
 MODELS = {"M0": M0, "M1": M1, "M2": M2, "M3": M3}
-ALPHAS = [0.1, 1, 10, 100, 1000, 1e4, 1e5]
+ALPHAS = [0.1, 1, 10, 100, 1000, 1e4, 1e5, 1e6, 1e7]
 
 
 def add_interactions(e):
@@ -127,7 +127,8 @@ def add_interactions(e):
     e["i_asym_dist"] = e["f_asym0.2"] * e.f_dist
     # pooled single names: centre log-gross per symbol on DEVELOPMENT data only
     dev_mean = e[e.split == "dev"].groupby("symbol").f_log_gross.mean()
-    e["f_log_gross"] = e.f_log_gross - e.symbol.map(dev_mean).fillna(e.f_log_gross.mean())
+    fill = e.loc[e.split == "dev", "f_log_gross"].mean()
+    e["f_log_gross"] = e.f_log_gross - e.symbol.map(dev_mean).fillna(fill)
     return e
 
 
@@ -154,13 +155,16 @@ def evaluate_models(e, target="y_r15", kind="ridge", tag=""):
         if kind == "ridge":
             mse = {a: np.mean((val.y - fit_predict(kind, cols, dev, val, a)) ** 2) for a in ALPHAS}
             a = min(mse, key=mse.get)
+        elif kind == "ols":            # essentially unpenalised: shows what the data say
+            kind_fit, a = "ridge", 1e-6
         else:
             a = None
         chosen[name] = a
-        preds["val"][name] = fit_predict(kind, cols, dev, val, a)
+        k_ = "ridge" if kind == "ols" else kind
+        preds["val"][name] = fit_predict(k_, cols, dev, val, a)
         both = pd.concat([dev, val])
-        preds["holdout"][name] = fit_predict(kind, cols, both, hold, a)
-        preds["val_refit"][name] = fit_predict(kind, cols, both, val, a)   # threshold only
+        preds["holdout"][name] = fit_predict(k_, cols, both, hold, a)
+        preds["val_refit"][name] = fit_predict(k_, cols, both, val, a)   # threshold only
     train_mean = {"val": dev.y.mean(), "holdout": pd.concat([dev, val]).y.mean()}
     out = []
     for part, df in (("val", val), ("holdout", hold)):
@@ -180,15 +184,50 @@ def evaluate_models(e, target="y_r15", kind="ridge", tag=""):
             vs_zero = 1 - sse[name].sum() / zero.sum()
             bz = 1 - (w @ sse[name]) / (w @ zero)
             mae = np.mean(np.abs(df.y.to_numpy() - preds[part][name]))
+            edge = kind == "ridge" and chosen[name] in (ALPHAS[0], ALPHAS[-1])
             out.append(dict(target=target, kind=kind, part=part, model=name, baseline=bname,
                             skill_vs_prev=skill, lo=np.percentile(bs, 2.5), hi=np.percentile(bs, 97.5),
                             skill_vs_mean=vs_zero, mean_lo=np.percentile(bz, 2.5),
                             mean_hi=np.percentile(bz, 97.5), mae=mae, alpha=chosen[name],
-                            n=len(df), days=len(days)))
-        # the primary contrast M3 vs M2 (identical rows)
+                            alpha_at_edge=edge, n=len(df), days=len(days)))
     res = pd.DataFrame(out)
     res["tag"] = tag
     return res, preds, (dev, val, hold)
+
+
+def residual_increment(e, target="y_r15"):
+    """Direct test of the M3 increment: fit ONLY the M3-specific features to the
+    residuals of the M2 model (each ridge, penalty chosen on validation), so the
+    M2 penalty cannot mute the new features. Holdout skill vs M2 with day bootstrap."""
+    e = add_interactions(e[e.level == "real"]).dropna(subset=[target]).copy()
+    e["y"] = e[target]
+    feats = sorted(set(sum(MODELS.values(), [])))
+    e[feats] = e[feats].fillna(0.0)
+    dev, val, hold = (e[e.split == s] for s in ("dev", "val", "holdout"))
+    new = [c for c in M3 if c not in M2]
+    out = {}
+    for a2_mode in ("val", "light"):
+        if a2_mode == "val":
+            m2 = {a: np.mean((val.y - fit_predict("ridge", M2, dev, val, a)) ** 2) for a in ALPHAS}
+            a2 = min(m2, key=m2.get)
+        else:
+            a2 = 1.0
+        both = pd.concat([dev, val])
+        r_dev = dev.y - fit_predict("ridge", M2, dev, dev, a2)
+        r_val = val.y - fit_predict("ridge", M2, dev, val, a2)
+        m3 = {a: np.mean((r_val - fit_predict("ridge", new, dev.assign(y=r_dev), val, a)) ** 2) for a in ALPHAS}
+        a3 = min(m3, key=m3.get)
+        p2 = fit_predict("ridge", M2, both, hold, a2)
+        r_both = both.y - fit_predict("ridge", M2, both, both, a2)
+        p3 = p2 + fit_predict("ridge", new, both.assign(y=r_both), hold, a3)
+        days = sorted(hold.date.unique())
+        s2 = pd.Series((hold.y - p2) ** 2).groupby(hold.date).sum().reindex(days).to_numpy()
+        s3 = pd.Series((hold.y - p3) ** 2).groupby(hold.date).sum().reindex(days).to_numpy()
+        w = _day_weights(days)
+        bs = 1 - (w @ s3) / (w @ s2)
+        out[a2_mode] = dict(skill=1 - s3.sum() / s2.sum(), lo=np.percentile(bs, 2.5),
+                            hi=np.percentile(bs, 97.5), alpha_m2=a2, alpha_inc=a3, n=len(hold))
+    return out
 
 
 def trading(preds, val, hold, sym, cost):
@@ -204,11 +243,15 @@ def trading(preds, val, hold, sym, cost):
         pnl = side * hold.y.to_numpy()[take] - cost
         d = hold[take].assign(pnl=pnl, price_side=side * hold.s.to_numpy()[take])
         r = boot_mean(d, "pnl")
+        if name == "M0":
+            d0 = d
         rows.append(dict(symbol=sym, model=name, trades=int(take.sum()), days=d.date.nunique(),
                          net_mean=r["mean"], lo=r["lo"], hi=r["hi"],
                          long_mean=d[d.price_side > 0].pnl.mean(), n_long=int((d.price_side > 0).sum()),
                          short_mean=d[d.price_side < 0].pnl.mean(), n_short=int((d.price_side < 0).sum()),
                          cost=cost, threshold=thr))
+    diff = boot_diff(d, d0, "pnl")       # M3 rule minus M0 rule, days resampled jointly
+    rows[-1].update(diff_vs_M0=diff["diff"], diff_lo=diff["lo"], diff_hi=diff["hi"])
     return pd.DataFrame(rows)
 
 
@@ -371,9 +414,9 @@ def main():
         desc.append(descriptive(e, sym))
         regimes.append(regime_check(e, sym))
         groups.append(secondary_groups(e, sym))
-        for kind in ("ridge", "gbm"):
+        for kind in ("ridge", "ols", "gbm"):
             for target in ("y_r15", "y_rv15", "y_abs15"):
-                if kind == "gbm" and target != "y_r15":
+                if kind != "ridge" and target != "y_r15":
                     continue
                 res, preds, (dev, val, hold) = evaluate_models(e, target, kind)
                 res["symbol"] = sym
@@ -385,6 +428,7 @@ def main():
                         hold.assign(**{f"pred_{k}": v for k, v in preds["holdout"].items()}) \
                             [["event_id", "date", "y"] + [f"pred_{k}" for k in MODELS]] \
                             .to_csv(TAB / "primary_holdout_predictions.csv", index=False)
+        RES[sym] = residual_increment(e)
         panel = landmark_panel(e[e.split.isin(["dev", "val", "holdout"])], sym)
         xeff[sym] = crossing_effect(panel, e.b.iloc[0])
         lm = []
@@ -423,7 +467,18 @@ def main():
 
     pd.concat(desc).to_csv(TAB / "descriptive.csv", index=False)
     pd.concat(models).to_csv(TAB / "models.csv", index=False)
-    pd.concat(rob).to_csv(TAB / "robustness_models.csv", index=False)
+    rob = pd.concat(rob)
+    hm = rob[(rob.part == "holdout") & (rob.model == "M3")].copy()
+    # Holm across all robustness cells; p from the bootstrap CI is not stored, so use a
+    # normal approximation from the 95% interval
+    se = (hm.hi - hm.lo) / (2 * 1.96)
+    from scipy.stats import norm
+    hm["p_approx"] = 2 * norm.sf(np.abs(hm.skill_vs_prev / se.replace(0, np.nan)))
+    hm["p_holm"] = holm(hm.p_approx.fillna(1).to_numpy())
+    rob = rob.merge(hm[["tag", "symbol", "part", "model", "p_approx", "p_holm"]], how="left",
+                    on=["tag", "symbol", "part", "model"])
+    rob.to_csv(TAB / "robustness_models.csv", index=False)
+    json.dump(RES, open(TAB / "residual_increment.json", "w"), indent=1, default=float)
     pd.concat(trades).to_csv(TAB / "trading.csv", index=False)
     pd.concat(groups).to_csv(TAB / "secondary_groups.csv", index=False)
     pd.concat(regimes).to_csv(TAB / "regime_check.csv", index=False)
@@ -453,9 +508,6 @@ def main():
     print("analysis complete")
 
 
-if __name__ == "__main__":
-    main()
-
 
 # ----------------------------------------------------------------------------- controlled vol
 def controlled_vol(e, sym):
@@ -467,6 +519,8 @@ def controlled_vol(e, sym):
                  "upward": (r.f_s > 0).astype(float)}
     tod = pd.get_dummies(pd.cut(r.f_tod, [0, 60, 120, 180, 240, 300, 390]), drop_first=True).astype(float)
     base = pd.concat([r[["f_rv30", "f_range30"]], r.f_dayret.abs().rename("absday"), tod], axis=1)
+    if r.symbol.nunique() > 1:      # pooled: symbol fixed effects absorb level differences
+        base = pd.concat([base, pd.get_dummies(r.symbol, drop_first=True).astype(float)], axis=1)
     days = r.date.to_numpy()
     ud = np.unique(days)
     idx = {u: np.flatnonzero(days == u) for u in ud}
@@ -491,3 +545,7 @@ def run_controlled():
     pool = E[~E.symbol.isin([spec.PRIMARY, *spec.REPLICATIONS, *spec.EXCLUDE_FROM_POOL])]
     out.append(controlled_vol(pool, "POOL"))
     pd.concat(out).to_csv(TAB / "controlled_vol.csv", index=False)
+
+
+if __name__ == "__main__":
+    main()

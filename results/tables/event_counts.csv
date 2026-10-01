@@ -1,5 +1,5 @@
 symbol,level,split,n,days
-AAOI,placebo,dev,552,22
+AAOI,placebo,dev,550,22
 AAOI,placebo,holdout,366,21
 AAOI,placebo,val,513,21
 AAOI,real,dev,539,22
@@ -90,7 +90,7 @@ CRWV,real,dev,385,22
 CRWV,real,holdout,281,21
 CRWV,real,val,337,21
 DELL,placebo,dev,588,22
-DELL,placebo,holdout,657,21
+DELL,placebo,holdout,653,21
 DELL,placebo,val,529,21
 DELL,real,dev,655,22
 DELL,real,holdout,651,21
@@ -107,9 +107,9 @@ GOOGL,placebo,val,212,21
 GOOGL,real,dev,265,22
 GOOGL,real,holdout,179,21
 GOOGL,real,val,176,21
-GS,placebo,dev,492,22
+GS,placebo,dev,489,22
 GS,placebo,holdout,398,21
-GS,placebo,val,462,21
+GS,placebo,val,438,21
 GS,real,dev,446,22
 GS,real,holdout,421,21
 GS,real,val,439,21
@@ -131,7 +131,7 @@ INTC,placebo,val,304,21
 INTC,real,dev,400,22
 INTC,real,holdout,282,21
 INTC,real,val,279,21
-IONQ,placebo,dev,275,22
+IONQ,placebo,dev,272,22
 IONQ,placebo,holdout,248,21
 IONQ,placebo,val,302,21
 IONQ,real,dev,279,22
@@ -169,7 +169,7 @@ MSFT,real,holdout,254,21
 MSFT,real,val,300,21
 MU,placebo,dev,811,22
 MU,placebo,holdout,603,21
-MU,placebo,val,772,21
+MU,placebo,val,770,21
 MU,real,dev,872,22
 MU,real,holdout,617,21
 MU,real,val,739,21
@@ -221,7 +221,7 @@ RGTI,placebo,val,66,18
 RGTI,real,dev,97,21
 RGTI,real,holdout,70,20
 RGTI,real,val,103,19
-RKLB,placebo,dev,372,22
+RKLB,placebo,dev,362,22
 RKLB,placebo,holdout,215,21
 RKLB,placebo,val,233,21
 RKLB,real,dev,385,22
@@ -245,9 +245,9 @@ SMH,placebo,val,392,21
 SMH,real,dev,634,22
 SMH,real,holdout,328,21
 SMH,real,val,421,21
-SNDK,placebo,dev,1572,22
+SNDK,placebo,dev,1564,22
 SNDK,placebo,holdout,1081,21
-SNDK,placebo,val,1151,21
+SNDK,placebo,val,1146,21
 SNDK,real,dev,1439,22
 SNDK,real,holdout,1059,21
 SNDK,real,val,1031,21
@@ -283,7 +283,7 @@ TSM,real,holdout,231,21
 TSM,real,val,298,21
 U,placebo,dev,195,22
 U,placebo,holdout,224,21
-U,placebo,val,234,21
+U,placebo,val,226,21
 U,real,dev,201,22
 U,real,holdout,251,21
 U,real,val,198,21

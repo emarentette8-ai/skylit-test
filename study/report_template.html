@@ -1,0 +1,421 @@
+<title>Strike Crossing Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (~72ch) for argument; figures and tables break out to a wider measure. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --ink: #14171c; --ink-2: #4a505a; --ink-3: #737a86;
+  --rule: #e2e5ea; --grid: #eceef2; --accent: #2a78d6;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --band1: rgba(42,120,214,.12); --band2: rgba(235,104,52,.12);
+  --good: #0ca30c; --warn: #fab219; --crit: #d03b3b; --neutral-chip: #eceef2;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121418; --panel: #1a1d22; --ink: #f1f3f6; --ink-2: #b9bfc9; --ink-3: #8d94a0;
+  --rule: #2b3038; --grid: #252a31; --accent: #3987e5;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --band1: rgba(57,135,229,.18); --band2: rgba(217,89,38,.18);
+  --neutral-chip: #2b3038; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121418; --panel: #1a1d22; --ink: #f1f3f6; --ink-2: #b9bfc9; --ink-3: #8d94a0;
+  --rule: #2b3038; --grid: #252a31; --accent: #3987e5;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --band1: rgba(57,135,229,.18); --band2: rgba(217,89,38,.18);
+  --neutral-chip: #2b3038; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); margin: 0; }
+.wrap { max-width: 1060px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 80px; display: grid; gap: 56px; }
+.prose { max-width: 72ch; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.08; font-weight: 700; }
+h2 { font-size: 1.55rem; font-weight: 600; margin-bottom: 14px; }
+h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+p { margin: 0 0 12px; }
+.eyebrow { font: 500 12px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+.lede { font-size: 1.15rem; color: var(--ink-2); max-width: 68ch; margin-top: 14px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; font: 13px/1.4 var(--f-mono); color: var(--ink-3); }
+section { display: grid; gap: 14px; }
+.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-size: .93em; }
+.answers { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.answer { background: var(--panel); padding: 18px 20px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.answer .q { font: 600 15px/1.35 var(--f-display); }
+.answer .a { color: var(--ink-2); font-size: 15.5px; }
+.chip { display: inline-block; font: 600 11px/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 7px; border-radius: 3px; background: var(--neutral-chip); color: var(--ink); white-space: nowrap; }
+.chip.no::before { content: "○ "; } .chip.desc::before { content: "◐ "; } .chip.inc::before { content: "? "; } .chip.yes::before { content: "● "; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 600 12px/1.3 var(--f-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); background: var(--panel); }
+td.n, th.n { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.fig { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 18px 18px 14px; display: grid; gap: 10px; min-width: 0; }
+.fig .cap { color: var(--ink-2); font-size: 15px; max-width: 80ch; }
+.fig .learn { font-size: 15px; border-top: 1px solid var(--rule); padding-top: 10px; color: var(--ink); max-width: 80ch; }
+.fig .learn b { font-family: var(--f-display); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13.5px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.key { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+.keydot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tabs button { font: 500 13px/1 var(--f-mono); padding: 7px 11px; border-radius: 4px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink-2); cursor: pointer; }
+.tabs button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.tabs button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--ink-3); font: 11.5px var(--f-mono); }
+.grid line { stroke: var(--grid); stroke-width: 1; }
+.zero { stroke: var(--ink-3); stroke-width: 1; }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--bg); font: 12.5px/1.45 var(--f-mono); padding: 8px 10px; border-radius: 4px; z-index: 10; max-width: 300px; }
+.small-multiples { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+.small-multiples > div { min-width: 0; }
+.mini-h { font: 500 12.5px/1.4 var(--f-mono); color: var(--ink-2); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+details { border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); padding: 12px 16px; }
+summary { cursor: pointer; font: 600 15px/1.4 var(--f-display); }
+details[open] summary { margin-bottom: 10px; }
+code, .mono { font-family: var(--f-mono); font-size: .88em; }
+.formula { font-family: var(--f-mono); font-size: 14px; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; overflow-x: auto; white-space: pre; }
+ul { margin: 0; padding-left: 20px; } li { margin-bottom: 6px; }
+.limits li b { font-family: var(--f-display); font-weight: 600; }
+.footer { font-size: 13.5px; color: var(--ink-3); border-top: 1px solid var(--rule); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Event study · QQQ, SPY, SPXW + 47 single names · Jul 1 – Sep 30, 2026</div>
+  <h1>Do option strikes move price when it reaches them?</h1>
+  <p class="lede">We tracked every time price entered a narrow band around a listed option strike, kept the approaches that failed to cross, and asked whether Skylit's gamma map at that moment helped forecast the next 15 minutes better than price behaviour and simpler gamma measures already did.</p>
+  <div class="meta"><span>Data: Skylit</span><span>1-minute bars + 30-minute Heatseeker gamma snapshots</span><span>Holdout: September 2026 (21 days)</span><span>Spec frozen before outcomes: commit 3ce2124</span></div>
+</header>
+
+<section>
+  <h2>Direct answers</h2>
+  <div class="answers" id="answers"></div>
+</section>
+
+<section>
+  <h2>Verdicts</h2>
+  <div class="tablewrap"><table id="verdicts"><thead><tr><th>Question</th><th>Verdict</th><th>What survived / what failed</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section class="prose">
+  <h2>What the data could and could not support</h2>
+  <p>The study ran on what exists in this project. Several parts of the brief need data that is not here, so those parts are restricted rather than approximated with invented numbers.</p>
+  <ul class="limits">
+    <li><b>No NQ or ES futures.</b> Outcomes are measured on the source underlying itself (QQQ primary; SPY and SPX index for SPXW as replications). Nothing here is futures hedge demand or a mapped overlay.</li>
+    <li><b>No option chains, trades, quotes, IV, OI or dealer inventory.</b> The only positioning input is Skylit's per-strike net gamma, already netted across the nearest five expirations and both rights. Finite-shock hedge demand cannot be repriced; call/put and expiry splits (H2) and options flow (M4, H4) are blocked.</li>
+    <li><b>No volume or order book.</b> The "observed market pressure" layer cannot be measured. Pressure is inferred from price only: returns, excursions, barrier hits, range and realised volatility.</li>
+    <li><b>Units and sign of <code>net_gamma</code> are not documented in the files</b>, and the Skylit API docs were unreachable from this environment. The quantity is labelled vendor-estimated exposure throughout. A volatility check (below) supports the dealer-long-gamma reading for single names but not for QQQ.</li>
+    <li><b>30-minute snapshots from 10:00 to 15:00 ET.</b> Events before 10:00 are excluded from every GEX comparison; after 15:00 the last snapshot is up to 59 minutes old (recorded as <code>f_snap_age</code>).</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Main results by instrument</h2>
+  <p class="prose">Each row is the primary entry cohort: every ATM-band entry with a gamma snapshot available, including approaches that never crossed. The matched baseline is the same state machine run on placebo levels halfway between listed strikes, on the same days.</p>
+  <div class="tablewrap"><table id="main"></table></div>
+</section>
+
+<section>
+  <div class="fig">
+    <h3>Price path around ATM-band entry</h3>
+    <div class="tabs" data-for="path"></div>
+    <div class="legend"><span><i class="key" style="background:var(--s1)"></i>Real strike entries</span><span><i class="key" style="background:var(--s2)"></i>Placebo mid-strike entries</span></div>
+    <div id="path"></div>
+    <p class="cap">Mean direction-adjusted return (% of raw price) relative to the executable entry price. Minutes −10…0 are the bars before the decision (descriptive only). Outcomes start at minute 1, after the next bar's open. Shaded bands: 95% day-block bootstrap intervals.</p>
+    <p class="learn"><b>What a trader learns:</b> the run-up into the band is the same at real strikes and at arbitrary mid-strike levels, and so is what follows. Price arrives with momentum and keeps a small, statistically weak drift in the same direction, but this happens at any level of the same spacing. The strike itself does not change the path.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fig">
+    <h3>Distance-to-threshold response: real strikes vs placebo levels</h3>
+    <div class="tabs" data-for="curve"></div>
+    <div class="legend"><span><i class="key" style="background:var(--s1)"></i>Real listed strikes</span><span><i class="key" style="background:var(--s2)"></i>Placebo levels halfway between strikes</span></div>
+    <div id="curve"></div>
+    <p class="cap">Every minute from 10:00 to 15:44 ET, for every threshold within 0.35% of price: the next 15-minute return measured toward the threshold (positive = price moved toward or through it). This uses all minutes, not only events, so it shows the full continuous-distance relationship.</p>
+    <p class="learn"><b>What a trader learns:</b> if strikes attracted or repelled price, the blue curve would separate from the orange one near zero distance. The two curves overlap within their intervals, so in this sample there is no strike-specific pull at 15 minutes.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fig">
+    <h3>Incremental forecast value, M0 → M3 (September holdout)</h3>
+    <div class="tabs" data-for="models"></div>
+    <div class="legend"><span><i class="keydot" style="background:var(--s1)"></i>Direction, ridge (penalty chosen on August)</span><span><i class="keydot" style="background:var(--s3)"></i>Direction, unpenalised OLS</span><span><i class="keydot" style="background:var(--s2)"></i>Volatility, ridge</span></div>
+    <div class="two"><div><div class="mini-h">Direction (15-min return)</div><div id="models"></div></div><div><div class="mini-h">Volatility (15-min realised vol)</div><div id="models-vol"></div></div></div>
+    <p class="cap">Out-of-sample skill of each model over the one before it, 1 − MSE(model)/MSE(previous), on identical rows; M0 is measured against the training-period mean. Whiskers: 95% paired day-block bootstrap. The pre-declared bar for a meaningful M3 gain was <span class="num" data-v="minSkill"></span> with an interval excluding zero. For QQQ and the single names, August chose the maximum ridge penalty, so the ridge direction forecasts are constant and their skill is exactly zero. The unpenalised OLS dots show what the features do when they are forced in: mostly overfitting noise.</p>
+    <p class="learn"><b>What a trader learns:</b> direction is essentially unforecastable here. The price-only model does not beat the average, and forcing in aggregate GEX, local GEX or the gamma-profile features adds noise rather than skill. Volatility is very forecastable from recent price behaviour (M0). Gamma adds to that only in SPXW, where aggregate GEX improves the volatility forecast by about 4%.</p>
+  </div>
+</section>
+
+<section class="two">
+  <div class="fig">
+    <h3>Time of day (0DTE clock proxy)</h3>
+    <div class="tabs" data-for="tod"></div>
+    <div id="tod"></div>
+    <p class="cap">Real minus placebo difference in direction-adjusted 15-minute return by decision hour. The data cannot separate expirations, so minutes-to-close stands in for 0DTE time remaining. Labels show real-strike event counts.</p>
+    <p class="learn"><b>What a trader learns:</b> no hour shows a reliable strike effect, including the final hour when 0DTE gamma is largest. The 15:00 bucket is wide because it has the fewest events and the stalest snapshot.</p>
+  </div>
+  <div class="fig">
+    <h3>Net vs gross gamma near the strike</h3>
+    <div class="tabs" data-for="cancel"></div>
+    <div id="cancel"></div>
+    <p class="cap">Real-strike entries grouped by how much the strikes within ±0.25% offset each other: |net| ÷ gross. Low values mean large positive and negative exposures cancel. Bars: mean direction-adjusted 15-minute return, with 95% intervals. The call/put split is not in the data, so this is cancellation across nearby strikes, not between rights.</p>
+    <p class="learn"><b>What a trader learns:</b> a region whose net gamma is near zero because big exposures cancel behaves no differently from a one-sided region. None of the bars is reliably different from zero, and they are not reliably different from each other.</p>
+  </div>
+</section>
+
+<section>
+  <div class="fig">
+    <h3>Example events (QQQ, fixed selection rule)</h3>
+    <p class="cap">Rule, set before looking: September holdout days #1, #8 and #15 in date order; on each, the first eligible real-strike entry at or after 11:00 ET. Line: 1-minute closes. Band: the strike ± b. Vertical rule: decision time (UTC shown).</p>
+    <div class="small-multiples" id="examples"></div>
+    <p class="learn"><b>What a trader learns:</b> typical events include stalls inside the band, quiet drifts back and occasional clean pushes through. The rule picked two non-crossings and one crossing; nothing about these three was chosen for how they turned out.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Secondary hypotheses</h2>
+  <div class="prose">
+    <p><b>H1, timing.</b> Within each entry episode we re-sampled the decision every minute and asked whether having crossed the strike predicts the next 15 minutes, beyond a flexible distance-to-strike term and minutes since entry. The crossing coefficient (direction-adjusted % return) is below. A real effect would show at real strikes and not at placebo levels.</p>
+  </div>
+  <div class="tablewrap"><table id="xeff"></table></div>
+  <div class="tablewrap"><table id="landmarks"></table></div>
+  <div class="prose"><p><b>H2, H3, H5: group contrasts.</b> Differences in mean outcome between groups of real-strike entries, with day-block intervals and Holm-adjusted p-values within each family. Direction (15-minute return) and volatility (15-minute realised vol) are kept separate.</p></div>
+  <div class="tabs" data-for="groups"></div>
+  <div class="tablewrap"><table id="groups"></table></div>
+  <div class="prose"><p><b>Are the volatility differences about strikes, or about when they happen?</b> The same contrasts with and without pre-event controls (30-minute realised vol and range, absolute day return, time-of-day bins).</p></div>
+  <div class="tablewrap"><table id="controlled"></table></div>
+  <div class="prose"><p><b>Sign-convention check.</b> If positive vendor net gamma means dealers are long gamma, volatility after the event should be lower when aggregate net gamma is positive.</p></div>
+  <div class="tablewrap"><table id="regime"></table></div>
+</section>
+
+<section>
+  <h2>Robustness and practical value</h2>
+  <div class="prose"><p>The primary M3 vs M2 holdout comparison under the pre-declared sensitivities: alternative band widths, a snapshot one step (30 minutes) staler, and a 2-minute execution delay.</p></div>
+  <div class="tablewrap"><table id="robust"></table></div>
+  <div class="prose"><p><b>Trading rule.</b> Trade in the forecast direction when the forecast is in the top 30% by size (threshold frozen on August), hold 15 minutes and pay a round-trip cost. The M3 rule is compared with the same rule built on price alone (M0).</p></div>
+  <div class="tablewrap"><table id="trading"></table></div>
+</section>
+
+<section class="prose">
+  <h2>Mechanics checks and review</h2>
+  <p>These are logic checks on the hedging definitions and the event code, kept separate from the market results (<code>tests/</code>, 12 passing):</p>
+  <ul>
+    <li>Long calls and long puts both have positive gamma; flipping the position sign reverses the modeled hedge adjustment (buy-on-rise for dealer short gamma, sell-on-rise for long).</li>
+    <li>A long call plus a short put at the same strike and expiry (a synthetic forward) has zero gamma. Moving it from OTM through ATM to ITM creates zero rehedging demand.</li>
+    <li>Relabeling a fixed position from OTM to ITM creates no new position; the hedge changes continuously through the strike, with no jump.</li>
+    <li>Zero inventory gives zero demand; multipliers scale linearly; finite hedge demand equals the integral of gamma over the price path; net and gross differ when components offset.</li>
+    <li>One same-strike crossing produces exactly one event; a jump across the whole band is classified separately; the 5-minute cooldown is enforced.</li>
+    <li>No look-ahead: for sampled QQQ and SPXW events, every feature recomputed from data truncated at the decision time is identical to the stored value. The outcome window starts at the next bar's open.</li>
+  </ul>
+  <p id="review"></p>
+</section>
+
+<section class="prose">
+  <h2>Single most useful next test</h2>
+  <p>Get per-contract open interest and IV, split by call/put and expiry, at the same strikes and snapshot times (or the Skylit matrix layout rather than the netted view), plus NQ 1-minute bars. That would unblock the parts of this study that are currently missing: the call/put and expiry split (H2), actual finite-shock hedge demand (M3 as specified) and the futures outcome. Without those inputs, a positioning measure built from this netted per-strike map is a reshaping of local GEX, and local GEX added nothing here.</p>
+</section>
+
+<details>
+  <summary>Appendix A — Exact specification</summary>
+  <div class="formula">signed distance      x_t = 100 · (S_t − K) / S_t          (S_t = 1-min close)
+ATM band            |x_t| ≤ b    b = 0.05 pp (QQQ, SPY, singles); 0.025 pp (SPXW, strikes 0.065% apart)
+arming              observed close with |x| ≥ 2b; re-arm ≥ 5 min after the prior entry at that strike
+entry (A)           first close with |x| ≤ b while armed; s = +1 if armed from below, −1 from above (frozen)
+band jump           armed, next close beyond the band on the opposite side → classified separately
+decision time       τ = entry bar label + 1 min  (bar closes are observable at label + 1)
+executable entry    P0 = open of bar τ
+gamma snapshot      latest Skylit snapshot with time ≤ τ (README: snapshot = latest at or before time)
+primary outcome     R15 = s · 100 · (close of bar τ+14 − P0) / P0     (censored if τ+14 > 15:59)
+barrier             ±0.10% from P0, 15-min deadline; both in one bar → "ambiguous", never resolved favourably
+crossing            first close with s·x > 0 after τ, only for entries still on the approach side (s·x < 0)
+placebo levels      midpoints between consecutive listed strikes, same state machine and days
+splits              dev Jul 1–31 · validation Aug 1–31 · holdout Sep 1–30 (whole days; intraday labels → no purge gap)
+inference           trading-day block bootstrap (2,000 reps); model comparisons on identical rows
+models              ridge (penalty chosen on validation, refit dev+val, scored once on holdout); GBM sensitivity</div>
+  <p style="margin-top:12px">Post-review change: the ridge penalty grid was extended from 1e5 to 1e7 after the reviewer showed that QQQ's choice sat at the old edge. The primary estimate moved from +0.01% to 0.00%. The residual-increment test (M3-only features fitted to M2's errors, each penalty chosen on August) was added as the direct test of the M3 increment.</p>
+  <p>Model feature sets. <b>M0</b>: approach direction, distance, prior 1/5/15/30-min and day returns, 30-min realised vol and range, speed, acceleration, time of day (and squared), prior encounters at the strike, strike roundness. <b>M1</b>: + aggregate net/gross ratio, log gross, snapshot age, change in net ratio since the prior snapshot. <b>M2</b>: + local strike share, ±0.25% region net/gross/cancellation, Skylit node type, change in local share, distance×local and local×aggregate interactions. <b>M3</b>: + net gamma in shock windows ahead of and behind the strike (±0.10%, ±0.20%) and their asymmetry, king distance and sign, interactions. <b>M4</b> (options flow) is not estimable.</p>
+  <p>Note on M3: QQQ and SPY strikes are about 0.13–0.14% apart, so the primary ±0.10% window rarely contains a second strike. With this data the primary-size shock feature mostly reduces to the local gamma already in M2; only the ±0.20% window carries new information.</p>
+</details>
+
+<details>
+  <summary>Appendix B — Event counts and files</summary>
+  <div class="tablewrap"><table id="counts"></table></div>
+  <p style="margin-top:12px">Reproduce: <code>pip install -r requirements.txt</code> · <code>python3 -m study.build</code> (plus <code>--band</code>, <code>--snap-lag 1</code>, <code>--delay 2</code> variants for QQQ SPY SPXW) · <code>python3 -m study.analyze</code> · <code>python3 -m study.report_data &amp;&amp; python3 -m study.report</code> · <code>pytest tests</code>. Machine-readable results are in <code>results/tables/</code>; the event dataset is <code>results/cache/events.parquet</code> (gitignored, rebuilt by the command above).</p>
+</details>
+
+<p class="footer">Data: Skylit (skylit.ai). All returns are percentages of raw, unadjusted prices. Results are predictive associations within one quarter of data; no causal effect is claimed.</p>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+const D = /*__DATA__*/null;
+const $ = (s, el=document) => el.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const f = (x, d=3) => x == null || isNaN(x) ? "–" : (+x).toFixed(d);
+const pct = (x, d=1) => x == null || isNaN(x) ? "–" : (100*x).toFixed(d) + "%";
+const sgn = (x, d=3) => x == null || isNaN(x) ? "–" : (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(d);
+const ci = (lo, hi, d=3) => `[${sgn(lo,d)}, ${sgn(hi,d)}]`;
+const SYMS = ["QQQ","SPY","SPXW"];
+const tip = $("#tip");
+function showTip(e, html) { tip.innerHTML = html; tip.hidden = false;
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8); tip.style.left = x + "px"; tip.style.top = (e.clientY + 14) + "px"; }
+function hideTip() { tip.hidden = true; }
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs={}, parent) { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.appendChild(n); return n; }
+function ticks(lo, hi, n=5) { const span = hi - lo, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
+  const step = [1,2,2.5,5,10].map(m => m*mag).find(s => s >= step0); const out = []; for (let v = Math.ceil(lo/step)*step; v <= hi + 1e-12; v += step) out.push(+v.toFixed(10)); return out; }
+
+/* line chart with CI bands and crosshair tooltip */
+function lineCI(host, series, o) {
+  host.innerHTML = ""; const W = 960, H = o.h || 320, m = {l: 58, r: 16, t: 12, b: 38};
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": o.label}, host);
+  const xs = series.flatMap(s => s.pts.map(p => p.x)); const ys = series.flatMap(s => s.pts.flatMap(p => [p.lo ?? p.y, p.hi ?? p.y]));
+  let [x0, x1] = [Math.min(...xs), Math.max(...xs)]; let [y0, y1] = [Math.min(0, ...ys), Math.max(0, ...ys)]; const pad = (y1-y0)*.08; y0 -= pad; y1 += pad;
+  const X = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), Y = v => m.t + (y1 - v) / (y1 - y0) * (H - m.t - m.b);
+  const g = el("g", {class: "grid"}, svg);
+  ticks(y0, y1).forEach(t => { el("line", {x1: m.l, x2: W - m.r, y1: Y(t), y2: Y(t)}, g); const tx = el("text", {x: m.l - 8, y: Y(t) + 4, "text-anchor": "end"}, svg); tx.textContent = o.yfmt ? o.yfmt(t) : t; });
+  (o.xticks || ticks(x0, x1, 8)).forEach(t => { const tx = el("text", {x: X(t), y: H - m.b + 18, "text-anchor": "middle"}, svg); tx.textContent = o.xfmt ? o.xfmt(t) : t; });
+  el("line", {class: "zero", x1: m.l, x2: W - m.r, y1: Y(0), y2: Y(0)}, svg);
+  if (o.vline != null) el("line", {x1: X(o.vline), x2: X(o.vline), y1: m.t, y2: H - m.b, stroke: css("--ink-3"), "stroke-width": 1}, svg);
+  if (o.xlabel) { const t = el("text", {x: W - m.r, y: H - 4, "text-anchor": "end"}, svg); t.textContent = o.xlabel; }
+  if (o.ylabel) { const t = el("text", {x: m.l, y: m.t - 2 < 10 ? 10 : m.t - 2}, svg); }
+  series.forEach(s => { const p = s.pts.filter(q => q.lo != null);
+    if (p.length) el("path", {d: "M" + p.map(q => `${X(q.x)},${Y(q.hi)}`).join("L") + "L" + p.slice().reverse().map(q => `${X(q.x)},${Y(q.lo)}`).join("L") + "Z", fill: css(s.band), stroke: "none"}, svg);
+    el("path", {d: "M" + s.pts.map(q => `${X(q.x)},${Y(q.y)}`).join("L"), fill: "none", stroke: css(s.color), "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round"}, svg); });
+  const cross = el("line", {y1: m.t, y2: H - m.b, stroke: css("--ink-3"), "stroke-width": 1, visibility: "hidden"}, svg);
+  const dots = series.map(s => el("circle", {r: 4.5, fill: css(s.color), stroke: css("--panel"), "stroke-width": 2, visibility: "hidden"}, svg));
+  const hit = el("rect", {x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent"}, svg);
+  hit.addEventListener("mousemove", e => { const r = svg.getBoundingClientRect(); const vx = x0 + ((e.clientX - r.left) * W / r.width - m.l) / (W - m.l - m.r) * (x1 - x0);
+    const all = series[0].pts; const near = all.reduce((a, b) => Math.abs(b.x - vx) < Math.abs(a.x - vx) ? b : a); cross.setAttribute("x1", X(near.x)); cross.setAttribute("x2", X(near.x)); cross.setAttribute("visibility", "visible");
+    let html = `<b>${o.xfmt ? o.xfmt(near.x) : near.x}</b>`; series.forEach((s, i) => { const q = s.pts.find(p => p.x === near.x); if (!q) return; dots[i].setAttribute("cx", X(q.x)); dots[i].setAttribute("cy", Y(q.y)); dots[i].setAttribute("visibility", "visible");
+      html += `<br>${s.name}: ${sgn(q.y, 4)}${q.lo != null ? " " + ci(q.lo, q.hi, 4) : ""}${q.n != null ? " · n=" + q.n : ""}`; }); showTip(e, html); });
+  hit.addEventListener("mouseleave", () => { hideTip(); cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); });
+}
+
+/* horizontal dot + CI chart: rows of categories, one or more series per row */
+function dotCI(host, rows, o) {
+  host.innerHTML = ""; const W = o.W || 960, rowH = o.rowH || 34, m = {l: o.left || 150, r: 20, t: 8, b: 34}; const H = m.t + m.b + rows.length * rowH;
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": o.label}, host);
+  const vals = rows.flatMap(r => r.items.flatMap(i => [i.lo, i.hi, i.v])).filter(v => v != null && !isNaN(v));
+  let lo = Math.min(0, ...vals), hi = Math.max(0, ...vals); if (o.ref != null) { lo = Math.min(lo, o.ref); hi = Math.max(hi, o.ref); } const pd = (hi - lo) * .06; lo -= pd; hi += pd;
+  const X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  const g = el("g", {class: "grid"}, svg); ticks(lo, hi, 6).forEach(t => { el("line", {x1: X(t), x2: X(t), y1: m.t, y2: H - m.b}, g); const tx = el("text", {x: X(t), y: H - m.b + 18, "text-anchor": "middle"}, svg); tx.textContent = o.fmt ? o.fmt(t) : t; });
+  el("line", {class: "zero", x1: X(0), x2: X(0), y1: m.t, y2: H - m.b}, svg);
+  if (o.ref != null) { el("line", {x1: X(o.ref), x2: X(o.ref), y1: m.t, y2: H - m.b, stroke: css("--ink-2"), "stroke-width": 1, "stroke-dasharray": "0"}, svg); const t = el("text", {x: X(o.ref) + 4, y: m.t + 10}, svg); t.textContent = o.refLabel || ""; }
+  if (o.xlabel) { const t = el("text", {x: W - m.r, y: H - 4, "text-anchor": "end"}, svg); t.textContent = o.xlabel; }
+  rows.forEach((r, ri) => { const cy = m.t + ri * rowH + rowH / 2; const lab = el("text", {x: m.l - 10, y: cy + 4, "text-anchor": "end"}, svg); lab.textContent = r.label; lab.style.fill = css("--ink-2");
+    r.items.forEach((it, k) => { if (it.v == null || isNaN(it.v)) return; const y = cy + (k - (r.items.length - 1) / 2) * 9; const c = css(it.color);
+      if (it.lo != null) el("line", {x1: X(it.lo), x2: X(it.hi), y1: y, y2: y, stroke: c, "stroke-width": 2, "stroke-linecap": "round"}, svg);
+      const d = el("circle", {cx: X(it.v), cy: y, r: 5, fill: c, stroke: css("--panel"), "stroke-width": 2}, svg);
+      if (it.note) { const t = el("text", {x: X(Math.max(it.hi ?? it.v, it.v)) + 8, y: y + 4}, svg); t.textContent = it.note; }
+      const hitc = el("circle", {cx: X(it.v), cy: y, r: 12, fill: "transparent"}, svg);
+      hitc.addEventListener("mousemove", e => showTip(e, it.tip)); hitc.addEventListener("mouseleave", hideTip); }); });
+}
+
+/* tabs helper */
+function tabs(name, opts, cb, initial) { const host = document.querySelector(`.tabs[data-for="${name}"]`); host.innerHTML = "";
+  opts.forEach(o => { const b = document.createElement("button"); b.type = "button"; b.textContent = o; b.setAttribute("aria-pressed", o === initial); b.onclick = () => { host.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); cb(o); }; host.appendChild(b); }); cb(initial); }
+
+/* ---------- derived numbers ---------- */
+const model = (sym, tgt, mdl, part="holdout", kind="ridge") => D.models.find(r => r.symbol === sym && r.target === tgt && r.model === mdl && r.part === part && r.kind === kind);
+const desc = (sym, out) => D.descriptive.find(r => r.symbol === sym && r.outcome === out);
+const prim = model("QQQ", "y_r15", "M3");
+const RI = D.resinc;
+const V = { minSkill: pct(D.spec.min_skill, 1) };
+document.querySelectorAll("[data-v]").forEach(n => n.textContent = V[n.dataset.v]);
+
+/* ---------- answers + verdicts ---------- */
+const spxVol = model("SPXW", "y_rv15", "M1");
+const ans = [
+  ["1. Is there measurable pressure or price behaviour around these transitions?",
+   `Price behaviour, yes; strike-specific behaviour, no. QQQ entries drift ${sgn(desc("QQQ","y_r15").real,3)}% in the approach direction over 15 minutes, and placebo mid-strike levels drift ${sgn(desc("QQQ","y_r15").placebo,3)}%. The difference is ${sgn(desc("QQQ","y_r15").diff,3)}% ${ci(desc("QQQ","y_r15").diff_lo, desc("QQQ","y_r15").diff_hi)}. Order-flow pressure could not be measured (no volume data).`],
+  ["2. Which call/put positions and expiry groups matter?",
+   "Not testable as asked: the gamma map is netted across calls, puts and five expirations. Proxies (sign of the strike's own gamma, Skylit node type, the last 90 minutes as a 0DTE clock) show no direction effect that survives multiple-testing correction."],
+  ["3. Before entry, at crossing, or afterward?",
+   `Before: the run-up is identical at real and placebo levels. At crossing: the within-episode crossing coefficient for QQQ is ${sgn(D.crossing.QQQ.real.coef,3)}% ${ci(D.crossing.QQQ.real.lo, D.crossing.QQQ.real.hi)}, and SPY's placebo levels show a larger coefficient than its real strikes. Afterward: far-side exits continue slightly at both real and placebo levels alike.`],
+  ["4. Does it add information beyond aggregate GEX, and beyond local GEX?",
+   `No. Fitting only the M3 features to M2's errors gives a QQQ holdout skill of ${sgn(100*RI.QQQ.val.skill,2)}% of MSE ${ci(100*RI.QQQ.val.lo,100*RI.QQQ.val.hi,2)}. The upper bound is below the pre-declared +0.5% bar. The frozen ridge procedure picked maximum shrinkage for every QQQ model: August contained no direction signal worth fitting, from price, aggregate GEX or local GEX.`],
+  ["5. Directional, volatility, liquidity, or descriptive?",
+   `Volatility, and only partly. Aggregate GEX improves the SPXW volatility forecast by ${pct(spxVol.skill_vs_prev,1)} on the holdout ${ci(100*spxVol.lo,100*spxVol.hi,1)}, but not in QQQ or SPY. The quieter tape after 'king' strikes is descriptive: it disappears in the index products, and shrinks to about 1% of mean volatility in single names, once pre-event volatility, time of day and symbol are controlled.`],
+  ["6. Does any practical benefit survive later data, delay and costs?",
+   "No. After a 1 bp round trip, the M3 rule's edge over the price-only rule has an interval spanning zero in every instrument, and neither rule beats zero. Two of 15 robustness cells have intervals above zero before correction (SPY with a 2-minute delay; SPXW with a ±0.10% band); after a Holm correction none does, the closest being p = 0.065."]
+];
+$("#answers").innerHTML = ans.map(([q, a]) => `<div class="answer"><div class="q">${q}</div><div class="a">${a}</div></div>`).join("");
+const verdicts = [
+  ["Primary: M3 beats M2 on 15-min direction (QQQ)", "no", "NO MATERIAL INCREMENTAL EFFECT", `Residual-increment holdout skill ${sgn(100*RI.QQQ.val.skill,2)}% ${ci(100*RI.QQQ.val.lo,100*RI.QQQ.val.hi,2)}, upper bound below the +0.5% bar. Unpenalised OLS: ${sgn(100*model("QQQ","y_r15","M3","holdout","ols").skill_vs_prev,2)}%, too noisy to inform. Null in SPY, SPXW and the 42k-event single-name pool.`],
+  ["Strikes behave differently from arbitrary levels", "no", "NO MATERIAL INCREMENTAL EFFECT", "Real vs placebo differences in return, barrier hits, excursions and range are within ±0.01% for QQQ and SPXW. SPY shows slightly more crossing at real strikes and the single-name pool slightly less (≈1 pp); the signs disagree."],
+  ["H1: crossing the exact strike adds information", "no", "NO MATERIAL INCREMENTAL EFFECT", "Crossing coefficients overlap zero at real strikes in all three instruments, and SPY placebo levels show a larger one."],
+  ["H2: call/put and expiry composition", "inc", "INCONCLUSIVE", "Blocked by netted data. QQQ local-gamma sign shows p = 0.014 for direction before correction, 0.084 after; SPXW shows the opposite sign."],
+  ["H3: local vs aggregate agreement", "desc", "DESCRIPTIVE ONLY", "No direction effect. Near-zero totals made of offsetting large exposures precede lower volatility in QQQ and SPXW; this is a regime description, not a strike effect."],
+  ["H4: fresh options transactions", "inc", "INCONCLUSIVE", "Not estimable: no trades or flow in the data."],
+  ["H5: first vs repeated encounters", "desc", "DESCRIPTIVE ONLY", "First encounters precede higher volatility, which is explained by time of day and pre-event volatility. No direction difference."],
+  ["Aggregate GEX forecasts volatility", "desc", "DESCRIPTIVE ONLY", `Holdout gain in SPXW only (${pct(spxVol.skill_vs_prev,1)}); not in QQQ or SPY; not tradable as tested.`],
+  ["Practical trading benefit", "no", "NO MATERIAL INCREMENTAL EFFECT", "Net of 1 bp cost, the M3 and M0 rules are both indistinguishable from zero and from each other."],
+];
+$("#verdicts tbody").innerHTML = verdicts.map(([q, c, v, t]) => `<tr><td>${q}</td><td><span class="chip ${c}">${v}</span></td><td>${t}</td></tr>`).join("");
+
+/* ---------- main table ---------- */
+(function(){ const rows = ["QQQ","SPY","SPXW","POOL"].map(s => { const r = desc(s,"y_r15"), c = desc(s,"y_cont"), mf = desc(s,"y_mfe15"), ma = desc(s,"y_mae15"), cr = desc(s,"y_cross15"), m3 = model(s,"y_r15","M3");
+  return `<tr><td>${s === "POOL" ? "47 single names" : s}</td><td class="n">${r.n_real.toLocaleString()}</td><td class="n">${r.days}</td><td class="n">${sgn(r.real)}</td><td class="n">${sgn(r.placebo)}</td><td class="n">${sgn(r.diff)} ${ci(r.diff_lo, r.diff_hi)}</td><td class="n">${pct(c.real)} vs ${pct(c.placebo)}</td><td class="n">${pct(cr.real)} vs ${pct(cr.placebo)}</td><td class="n">${f(mf.real)} / ${f(ma.real)}</td><td class="n">${RI[s] ? sgn(100*RI[s].val.skill,2) + "% " + ci(100*RI[s].val.lo,100*RI[s].val.hi,2) : (m3 ? sgn(100*m3.skill_vs_prev,2)+"% (ridge)" : "–")}</td></tr>`; });
+  $("#main").innerHTML = `<thead><tr><th>Instrument</th><th class="n">Events</th><th class="n">Days</th><th class="n">15-min ret %</th><th class="n">Placebo %</th><th class="n">Real − placebo [95%]</th><th class="n">Continue</th><th class="n">Cross ≤15m</th><th class="n">MFE / MAE %</th><th class="n">Holdout M3 increment [95%]</th></tr></thead><tbody>${rows.join("")}</tbody>`; })();
+
+/* ---------- figures ---------- */
+tabs("path", SYMS, s => { const mk = (lvl, name, color, band) => ({name, color, band, pts: D.paths.filter(p => p.symbol === s && p.level === lvl).map(p => ({x: p.k, y: p.mean, lo: p.lo, hi: p.hi}))});
+  lineCI($("#path"), [mk("real","Real","--s1","--band1"), mk("placebo","Placebo","--s2","--band2")], {label: "Event-aligned path", vline: 0, xlabel: "minutes from decision", xfmt: v => (v > 0 ? "+" : "") + v, yfmt: v => v.toFixed(3) + "%"}); }, "QQQ");
+tabs("curve", SYMS, s => { const mk = (lvl, name, color, band) => ({name, color, band, pts: D.curve.filter(p => p.symbol === s && p.level === lvl).map(p => ({x: p.x_mid, y: p.mean, lo: p.lo, hi: p.hi, n: p.n}))});
+  lineCI($("#curve"), [mk("real","Real","--s1","--band1"), mk("placebo","Placebo","--s2","--band2")], {label: "Distance response", xlabel: "|distance to threshold| (% of price)", xfmt: v => (+v).toFixed(3), yfmt: v => v.toFixed(3) + "%"}); }, "QQQ");
+tabs("models", [...SYMS, "Single names"], s => { const sym = s === "Single names" ? "POOL" : s;
+  const labs = {M0: "M0 price", M1: "M1 + aggregate", M2: "M2 + local", M3: "M3 + profile"};
+  const mk = spec => ["M0","M1","M2","M3"].map(mm => ({label: labs[mm], items: spec.map(([t, kind, col, lab]) => { const r = model(sym, t, mm, "holdout", kind); if (!r) return {v: null};
+    return {v: 100*r.skill_vs_prev, lo: 100*r.lo, hi: 100*r.hi, color: col, tip: `<b>${sym} ${mm} vs ${r.baseline}</b><br>${lab}: ${sgn(100*r.skill_vs_prev,2)}% ${ci(100*r.lo,100*r.hi,2)}${r.alpha_at_edge ? "<br>penalty at grid edge: constant forecast" : ""}<br>n=${r.n} events · ${r.days} days`}; })}));
+  dotCI($("#models"), mk([["y_r15","ridge","--s1","direction, ridge"],["y_r15","ols","--s3","direction, OLS"]]), {label: "Direction skill", W: 470, left: 120, fmt: v => v.toFixed(0) + "%", xlabel: "% of MSE", rowH: 40, ref: 0.5, refLabel: "+0.5% bar"});
+  dotCI($("#models-vol"), mk([["y_rv15","ridge","--s2","volatility, ridge"]]), {label: "Volatility skill", W: 470, left: 120, fmt: v => v.toFixed(0) + "%", xlabel: "% of MSE", rowH: 40});
+}, "QQQ");
+tabs("tod", SYMS, s => { const rows = D.tod.filter(r => r.symbol === s && r.outcome === "y_r15").map(r => ({label: r.bucket + " ET", items: [{v: r.diff, lo: r.diff_lo, hi: r.diff_hi, color: "--s1", note: "n=" + r.n, tip: `<b>${s} ${r.bucket}</b><br>real − placebo: ${sgn(r.diff,4)}% ${ci(r.diff_lo,r.diff_hi,4)}<br>real n=${r.n}, placebo n=${r.n_placebo}`}]}));
+  dotCI($("#tod"), rows, {label: "Time of day", W: 470, left: 76, fmt: v => v.toFixed(2), xlabel: "real − placebo, 15-min return %"}); }, "QQQ");
+tabs("cancel", SYMS, s => { const rows = D.cancel.filter(r => r.symbol === s && r.outcome === "y_r15").map(r => ({label: r.bucket.replace(" (heavy offset)","").replace(" (one-sided)",""), items: [{v: r.mean, lo: r.lo, hi: r.hi, color: "--s1", note: "n=" + r.n, tip: `<b>${s} |net|/gross ${r.bucket}</b><br>15-min return: ${sgn(r.mean,4)}% ${ci(r.lo,r.hi,4)}<br>avg region gross share ${pct(r.gross_share)} · avg |net| share ${pct(r.net_share)}<br>n=${r.n} · ${r.days} days`}]}));
+  dotCI($("#cancel"), rows, {label: "Cancellation", W: 470, left: 76, fmt: v => v.toFixed(2), xlabel: "15-min return %"}); }, "QQQ");
+
+/* examples */
+(function(){ const host = $("#examples"); D.examples.forEach(ex => { const div = document.createElement("div"); const hhmm = m => { const t = 570 + m; return `${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`; };
+  div.innerHTML = `<div class="mini-h">${ex.date} · K=${ex.K} · approach from ${ex.s > 0 ? "below" : "above"} · node: ${ex.node}<br>decision ${hhmm(ex.tau)} ET (${ex.utc.slice(11,16)} UTC) · R15 ${sgn(ex.r15,3)}% · barrier: ${ex.barrier} · ${ex.cross_t ? "crossed after " + ex.cross_t + " min" : "did not cross within 30 min"}</div>`;
+  const box = document.createElement("div"); div.appendChild(box); host.appendChild(div);
+  const W = 420, H = 210, m = {l: 50, r: 10, t: 10, b: 28}; const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Example event"}, box);
+  const xs = ex.pts.map(p => p[0]), ys = ex.pts.map(p => p[1]).concat([ex.K*(1+ex.b/100), ex.K*(1-ex.b/100)]); const x0 = Math.min(...xs), x1 = Math.max(...xs); let y0 = Math.min(...ys), y1 = Math.max(...ys); const pd = (y1-y0)*.08; y0 -= pd; y1 += pd;
+  const X = v => m.l + (v-x0)/(x1-x0)*(W-m.l-m.r), Y = v => m.t + (y1-v)/(y1-y0)*(H-m.t-m.b);
+  const g = el("g", {class: "grid"}, svg); ticks(y0, y1, 4).forEach(t => { el("line", {x1: m.l, x2: W-m.r, y1: Y(t), y2: Y(t)}, g); const tx = el("text", {x: m.l-6, y: Y(t)+4, "text-anchor": "end"}, svg); tx.textContent = t.toFixed(1); });
+  [x0, ex.tau, x1].forEach(t => { const tx = el("text", {x: X(t), y: H-8, "text-anchor": "middle"}, svg); tx.textContent = hhmm(t); });
+  el("rect", {x: m.l, width: W-m.l-m.r, y: Y(ex.K*(1+ex.b/100)), height: Y(ex.K*(1-ex.b/100)) - Y(ex.K*(1+ex.b/100)), fill: css("--band2")}, svg);
+  el("line", {x1: m.l, x2: W-m.r, y1: Y(ex.K), y2: Y(ex.K), stroke: css("--s2"), "stroke-width": 1.5}, svg);
+  el("line", {x1: X(ex.tau), x2: X(ex.tau), y1: m.t, y2: H-m.b, stroke: css("--ink-3"), "stroke-width": 1}, svg);
+  el("path", {d: "M" + ex.pts.map(p => `${X(p[0])},${Y(p[1])}`).join("L"), fill: "none", stroke: css("--s1"), "stroke-width": 2, "stroke-linejoin": "round"}, svg);
+  const hit = el("rect", {x: m.l, y: m.t, width: W-m.l-m.r, height: H-m.t-m.b, fill: "transparent"}, svg);
+  hit.addEventListener("mousemove", e => { const r = svg.getBoundingClientRect(); const vx = x0 + ((e.clientX - r.left)*W/r.width - m.l)/(W-m.l-m.r)*(x1-x0); const p = ex.pts.reduce((a,b) => Math.abs(b[0]-vx) < Math.abs(a[0]-vx) ? b : a); showTip(e, `${hhmm(p[0])} ET close ${p[1].toFixed(2)}<br>strike ${ex.K} · band ±${ex.b}%`); });
+  hit.addEventListener("mouseleave", hideTip); }); })();
+
+/* ---------- secondary tables ---------- */
+(function(){ const r = ["QQQ","SPY","SPXW"].map(s => { const c = D.crossing[s]; return `<tr><td>${s}</td><td class="n">${sgn(c.real.coef)} ${ci(c.real.lo,c.real.hi)}</td><td class="n">${sgn(c.placebo.coef)} ${ci(c.placebo.lo,c.placebo.hi)}</td><td class="n">${c.real.episodes.toLocaleString()}</td><td class="n">${c.real.n.toLocaleString()}</td><td class="n">${c.real.days}</td></tr>`; });
+  $("#xeff").innerHTML = `<thead><tr><th>Instrument</th><th class="n">Crossed coef, real [95%]</th><th class="n">Placebo [95%]</th><th class="n">Episodes</th><th class="n">Minute-decisions</th><th class="n">Days</th></tr></thead><tbody>${r.join("")}</tbody>`;
+  const L = D.landmarks; const lr = ["entry (j=0)","first crossing","exit far side","exit back"].map(lab => `<tr><td>${lab}</td>${["QQQ","SPY","SPXW"].map(s => { const a = L.find(x => x.symbol===s && x.landmark===lab && x.level==="real"), b = L.find(x => x.symbol===s && x.landmark===lab && x.level==="placebo"); return `<td class="n">${sgn(a.mean)} (n=${a.n})<br><span style="color:var(--ink-3)">pl. ${sgn(b.mean)}</span></td>`; }).join("")}</tr>`);
+  $("#landmarks").innerHTML = `<thead><tr><th>Landmark (new decision time)</th><th class="n">QQQ next-15m %</th><th class="n">SPY</th><th class="n">SPXW</th></tr></thead><tbody>${lr.join("")}</tbody>`; })();
+tabs("groups", SYMS, s => { const rows = D.groups.filter(g => g.symbol === s).map(g => `<tr><td>${g.family}</td><td>${g.contrast}</td><td>${g.outcome === "y_r15" ? "direction" : "volatility"}</td><td class="n">${sgn(g.mean_a,4)} vs ${sgn(g.mean_b,4)}</td><td class="n">${sgn(g.diff,4)} ${ci(g.lo,g.hi,4)}</td><td class="n">${f(g.p_boot,3)}</td><td class="n">${f(g.p_holm_family,3)}</td><td class="n">${g.n_a} / ${g.n_b}</td></tr>`);
+  $("#groups").innerHTML = `<thead><tr><th>Family</th><th>Contrast (A vs B)</th><th>Outcome</th><th class="n">Means %</th><th class="n">A − B [95%]</th><th class="n">p</th><th class="n">p Holm</th><th class="n">n A / B</th></tr></thead><tbody>${rows.join("")}</tbody>`; }, "QQQ");
+(function(){ const names = {king: "Strike is Skylit 'king'", first_encounter: "First encounter today", agg_net_pos: "Aggregate net gamma > 0", upward: "Upward approach"};
+  const rows = []; ["QQQ","SPY","SPXW","POOL"].forEach(s => Object.keys(names).forEach(k => { const a = D.controlled.find(r => r.symbol===s && r.contrast===k && !r.controls), b = D.controlled.find(r => r.symbol===s && r.contrast===k && r.controls);
+    rows.push(`<tr><td>${s === "POOL" ? "Single names" : s}</td><td>${names[k]}</td><td class="n">${sgn(a.coef,4)} ${ci(a.lo,a.hi,4)}</td><td class="n">${sgn(b.coef,4)} ${ci(b.lo,b.hi,4)}</td><td class="n">${pct(b.rel_to_mean)}</td></tr>`); }));
+  $("#controlled").innerHTML = `<thead><tr><th>Sample</th><th>Indicator</th><th class="n">Raw effect on 15-min vol</th><th class="n">With controls</th><th class="n">Controlled, % of mean vol</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+  const rr = ["QQQ","SPY","SPXW","POOL"].map(s => `<tr><td>${s === "POOL" ? "Single names" : s}</td>${D.regime.filter(r => r.symbol === s).map(r => `<td class="n">${f(r.rv15,4)}<br><span style="color:var(--ink-3)">net ${f(r.net_ratio_mid,2)}</span></td>`).join("")}</tr>`);
+  $("#regime").innerHTML = `<thead><tr><th>Sample</th><th class="n">Q1 most negative net</th><th class="n">Q2</th><th class="n">Q3</th><th class="n">Q4 most positive</th></tr></thead><tbody>${rr.join("")}</tbody>`; })();
+(function(){ const tags = {band0_025: "band 0.025", "band0.025": "band ±0.025", "band0.05": "band ±0.05", "band0.10": "band ±0.10", stale_snapshot: "snapshot 30 min staler", delay2min: "2-min execution delay"};
+  const rows = D.robustness.filter(r => r.part === "holdout" && r.model === "M3").map(r => `<tr><td>${tags[r.tag] || r.tag}</td><td>${r.symbol}</td><td class="n">${sgn(100*r.skill_vs_prev,2)}% ${ci(100*r.lo,100*r.hi,2)}</td><td class="n">${f(r.p_holm,3)}</td><td class="n">${r.n}</td><td class="n">${r.days}</td></tr>`);
+  $("#robust").innerHTML = `<thead><tr><th>Variant</th><th>Instrument</th><th class="n">M3 vs M2 holdout skill [95%]</th><th class="n">p Holm (15 cells)</th><th class="n">Events</th><th class="n">Days</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+  const tr = D.trading.map(r => `<tr><td>${r.symbol}</td><td>${r.model}</td><td class="n">${r.trades}</td><td class="n">${sgn(r.net_mean,4)} ${ci(r.lo,r.hi,4)}</td><td class="n">${sgn(r.long_mean,4)} (${r.n_long})</td><td class="n">${sgn(r.short_mean,4)} (${r.n_short})</td><td class="n">${r.diff_vs_M0 == null ? "–" : sgn(r.diff_vs_M0,4) + " " + ci(r.diff_lo,r.diff_hi,4)}</td><td class="n">${f(r.cost,3)}</td></tr>`);
+  $("#trading").innerHTML = `<thead><tr><th>Instrument</th><th>Rule</th><th class="n">Trades</th><th class="n">Net % per trade [95%]</th><th class="n">Long (n)</th><th class="n">Short (n)</th><th class="n">M3 − M0 [95%]</th><th class="n">Cost %</th></tr></thead><tbody>${tr.join("")}</tbody>`;
+  const cr = D.counts.filter(c => c.level === "real").map(c => `<tr><td>${c.symbol}</td><td>${c.split}</td><td class="n">${c.n}</td><td class="n">${c.days}</td></tr>`);
+  $("#counts").innerHTML = `<thead><tr><th>Symbol</th><th>Split</th><th class="n">Real-strike entries</th><th class="n">Days</th></tr></thead><tbody>${cr.join("")}</tbody>`; })();
+$("#review").textContent = D.review || "";
+</script>
