@@ -16,14 +16,14 @@ Tests:
 Usage: python3 scripts/confluence.py  (run rug.py first)
 Writes results/tables/confluence_{touch,rug}.csv.
 """
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+from load import TABLES
 from node_claims import INDEXES, NAMED, prepare, typical_range
 
-OUT = Path(__file__).resolve().parent.parent / "results" / "tables"
+OUT = TABLES
 NEAR = 0.25            # confluence tolerance, in typical ranges
 
 

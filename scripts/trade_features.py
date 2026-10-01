@@ -18,16 +18,15 @@ Winners are trades with r_net > 0.
 Usage: python3 scripts/trade_features.py  (run rug.py first)
 Writes results/tables/trade_features.csv and trade_features_summary.csv.
 """
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy.stats import mannwhitneyu
 
-from load import gamma as load_gamma
+from load import TABLES, gamma as load_gamma
 from node_claims import NAMED
 
-OUT = Path(__file__).resolve().parent.parent / "results" / "tables"
+OUT = TABLES
 FEATURES = ["king_dist_pct", "king_vs_target", "king_is_level", "level_node_pct",
             "king_share", "next_node_pct", "named_nearby", "local_net_share", "hour"]
 

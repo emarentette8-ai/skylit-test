@@ -19,14 +19,14 @@ Results are in R (multiples of risk), gross and after a round-trip cost.
 Usage: python3 scripts/rug.py
 Writes results/tables/rug_trades.csv and results/tables/rug_summary.csv.
 """
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+from load import TABLES
 from node_claims import prepare, typical_range
 
-OUT = Path(__file__).resolve().parent.parent / "results" / "tables"
+OUT = TABLES
 SYMBOLS = ("SPY", "QQQ", "SPXW")
 COST = 0.0002          # round trip, fraction of price
 WINDOW = 1.5           # search width for the ceiling/floor, in typical ranges

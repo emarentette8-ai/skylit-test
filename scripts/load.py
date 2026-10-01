@@ -4,11 +4,16 @@
 Data: Skylit (https://skylit.ai). See data/raw/watchlist/README.txt.
 Requires: pip install pandas pyarrow
 """
+import os
 from pathlib import Path
 
 import pandas as pd
 
-DATA = Path(__file__).resolve().parent.parent / "data" / "raw" / "watchlist"
+_ROOT = Path(__file__).resolve().parent.parent
+# SKYLIT_DATA=oos switches every study to data/raw/oos and results/tables/oos.
+_SET = os.environ.get("SKYLIT_DATA", "")
+DATA = _ROOT / "data" / "raw" / (_SET or "watchlist")
+TABLES = _ROOT / "results" / "tables" / _SET
 
 
 def gamma():

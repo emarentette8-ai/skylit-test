@@ -10,14 +10,13 @@ C. Node holds: when price touches a level, how often does it hold, by node
 Usage: python3 scripts/node_claims.py
 Writes results/tables/node_claims_{king,regime,touch,taps}.csv.
 """
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from load import bars as load_bars, gamma as load_gamma
+from load import TABLES, bars as load_bars, gamma as load_gamma
 
-OUT = Path(__file__).resolve().parent.parent / "results" / "tables"
+OUT = TABLES
 INDEXES = {"SPY", "QQQ", "SPXW"}
 NAMED = ("king", "gatekeeper", "pika", "barney")
 
