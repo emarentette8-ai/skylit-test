@@ -1,2 +1,7 @@
 pandas
 pyarrow
+numpy
+scipy
+scikit-learn
+matplotlib
+pytest
