@@ -1,3 +1,4 @@
 __pycache__/
 .pytest_cache/
 results/cache/
+data/raw/oos/parts/
