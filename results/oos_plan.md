@@ -24,7 +24,8 @@ its own; we report all five whatever the outcome.
 
 ## Result (added after the run; nothing above was changed)
 
-179 trading days, Oct 13 2025 - Jun 30 2026, 10,004 credits. Full table:
+179 trading days, Oct 13 2025 - Jun 30 2026. The pull itself used 9,973 credits
+(balance 82,322 -> 72,349); 10,004 including earlier test calls this session. Full table:
 `results/tables/oos/verdict.csv` (`scripts/oos_verdict.py`).
 
 | # | Jul-Sep 2026 | Oct 2025 - Jun 2026 | Verdict |
