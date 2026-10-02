@@ -1,0 +1,21 @@
+scope,split,trades,win_rate,target_rate,mean_r_net,ci95_low,ci95_high
+all symbols,all edge trades,2914,0.5347,0.4729,-0.1182,-0.1595,-0.0788
+all symbols,roll: no roll,1135,0.4996,0.4256,-0.1636,-0.2208,-0.1055
+all symbols,roll: with roll,1069,0.5435,0.4771,-0.1051,-0.1676,-0.0353
+all symbols,roll: against roll,312,0.7468,0.7212,0.0064,-0.0777,0.0863
+all symbols,roll: first map,398,0.4447,0.402,-0.1219,-0.2304,-0.0029
+all symbols,edge positive (yellow),1640,0.5415,0.4823,-0.0988,-0.1482,-0.0496
+all symbols,edge negative (purple),1274,0.5259,0.4608,-0.1432,-0.2001,-0.0854
+all symbols,edge >= 20% of King,2857,0.532,0.4711,-0.1219,-0.1628,-0.0822
+all symbols,edge < 20% of King,57,0.6667,0.5614,0.0653,-0.1526,0.2931
+all symbols,"positive, >=20% King, not against roll",1430,0.514,0.4517,-0.111,-0.1654,-0.0533
+indexes,all edge trades,1143,0.5853,0.5547,-0.1689,-0.2172,-0.1213
+indexes,roll: no roll,426,0.5423,0.5141,-0.2317,-0.3118,-0.1528
+indexes,roll: with roll,441,0.6032,0.5669,-0.1292,-0.2275,-0.0346
+indexes,roll: against roll,146,0.774,0.7466,-0.0525,-0.1772,0.069
+indexes,roll: first map,130,0.4538,0.4308,-0.2288,-0.4119,-0.0224
+indexes,edge positive (yellow),663,0.5777,0.549,-0.185,-0.2504,-0.1193
+indexes,edge negative (purple),480,0.5958,0.5625,-0.1467,-0.2294,-0.0657
+indexes,edge >= 20% of King,1125,0.5867,0.5556,-0.1663,-0.2152,-0.1186
+indexes,edge < 20% of King,18,0.5,0.5,-0.3328,-0.743,0.1108
+indexes,"positive, >=20% King, not against roll",560,0.5518,0.5232,-0.1902,-0.2644,-0.1181

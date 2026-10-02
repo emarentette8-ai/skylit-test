@@ -1,0 +1,5 @@
+index,roll,maps,close_followed_roll,mean_move_pct
+False,bearish,1591,0.4802,0.0068
+False,bullish,1566,0.4649,-0.0228
+True,bearish,1135,0.5048,0.0179
+True,bullish,1205,0.4913,-0.0177
