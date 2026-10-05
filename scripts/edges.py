@@ -23,7 +23,8 @@ import numpy as np
 import pandas as pd
 
 from load import TABLES
-from node_claims import INDEXES, prepare, typical_range
+from node_claims import INDEXES, prepare, scale_at, typical_range
+from stats import day_ci
 
 OUT = TABLES
 TAP, CONFIRM, STOP, COST = 0.1, 0.25, 0.5, 0.0002
@@ -94,9 +95,12 @@ def trades(m, day_bars, scale):
     for r in m.itertuples():
         if busy.get(r.symbol, pd.Timestamp.min) > r.time_et:
             continue
+        sc = scale_at(scale, r.symbol, r.date)
+        if np.isnan(sc):
+            continue
         b = day_bars[(r.symbol, r.date)]
         mid = (r.floor + r.ceiling) / 2
-        u = scale[r.symbol] * r.spot
+        u = sc * r.spot
         best = None
         for long, lvl, val in ((True, r.floor, r.floor_val), (False, r.ceiling, r.ceiling_val)):
             tr = simulate(b, r.time_et, r.time_et + pd.Timedelta(minutes=30), lvl, long, mid, u)
@@ -116,14 +120,6 @@ def trades(m, day_bars, scale):
     return pd.DataFrame(out)
 
 
-def day_ci(x, n=2000):
-    rng = np.random.default_rng(0)
-    g = x.groupby(x.map_time.dt.date).r_net.agg(["sum", "size"])
-    s, k = g["sum"].values, g["size"].values
-    v = [s[i].sum() / k[i].sum() for i in (rng.integers(0, len(g), len(g)) for _ in range(n))]
-    return np.percentile(v, [2.5, 97.5])
-
-
 def summarize(t):
     rows = []
     for scope, df in (("all symbols", t), ("indexes", t[t["index"]])):
@@ -135,7 +131,7 @@ def summarize(t):
                     (df.edge_sign == "+") & (df.edge_pct_king >= 20) & (df.vs_roll != "against roll"))]
         for name, mask in splits:
             x = df[mask]
-            lo, hi = day_ci(x) if len(x) > 1 else (np.nan, np.nan)
+            lo, hi = day_ci(x)
             rows.append(dict(scope=scope, split=name, trades=len(x), win_rate=(x.r > 0).mean(),
                              target_rate=(x.exit_how == "target").mean(), mean_r_net=x.r_net.mean(),
                              ci95_low=lo, ci95_high=hi))

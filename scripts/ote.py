@@ -23,7 +23,8 @@ import pandas as pd
 
 from confluence import NEAR, build_sr, near_sr
 from load import TABLES
-from node_claims import INDEXES, NAMED, prepare, typical_range
+from node_claims import INDEXES, NAMED, prepare, scale_at, typical_range
+from stats import day_ci
 
 OUT = TABLES
 ZONE = (0.618, 0.786)
@@ -82,9 +83,10 @@ def part_a(day_bars, scale, sr):
         if key not in cache:
             cache[key] = pivots(day_bars[key])
         d = -1 if r.setup.startswith("rug") else 1
-        leg = last_leg(cache[key], r.entry_time, d, scale[r.symbol] * r.entry)
+        sc = scale_at(scale, r.symbol, r.map_time)
+        leg = last_leg(cache[key], r.entry_time, d, sc * r.entry)
         ote_flag.append(bool(leg and in_zone(r.entry, leg)))
-        sr_flag.append(near_sr(sr, r.symbol, key[1], r.map_time, r.level, NEAR * scale[r.symbol] * r.level))
+        sr_flag.append(near_sr(sr, r.symbol, key[1], r.map_time, r.level, NEAR * sc * r.level))
     tr["sr"], tr["ote"] = sr_flag, ote_flag
     tr["family"] = np.where(tr.setup.str.endswith("control"), "control", "setup")
     rows = []
@@ -92,7 +94,7 @@ def part_a(day_bars, scale, sr):
         for name, mask in [("all trades", slice(None)), ("S/R", df.sr), ("OTE", df.ote),
                            ("S/R + OTE", df.sr & df.ote), ("neither", ~df.sr & ~df.ote)]:
             x = df[mask]
-            lo, hi = day_ci(x, "map_time") if len(x) > 1 else (np.nan, np.nan)
+            lo, hi = day_ci(x, "map_time")
             rows.append(dict(group=fam, filter=name, trades=len(x), win_rate=(x.r > 0).mean(),
                              mean_r_net=x.r_net.mean(), ci95_low=lo, ci95_high=hi))
     return pd.DataFrame(rows)
@@ -113,7 +115,8 @@ def part_b(g, day_bars, scale, sr):
     gm = {k: v for k, v in g[g.node_type.isin(NAMED)].groupby("symbol")}
     trades = []
     for (sym, d), b in day_bars.items():
-        if sym == "VIX" or sym not in scale:
+        sc = scale_at(scale, sym, d)
+        if sym == "VIX" or np.isnan(sc):
             continue
         piv = pivots(b)
         op, hi, lo, cl, tm = b.open.values, b.high.values, b.low.values, b.close.values, b.time_et.values
@@ -122,7 +125,7 @@ def part_b(g, day_bars, scale, sr):
         for k in range(len(piv)):
             known = piv[k][0]
             for direction in (-1, 1):
-                leg = last_leg(piv[:k + 1], known, direction, scale[sym] * piv[k][3])
+                leg = last_leg(piv[:k + 1], known, direction, sc * piv[k][3])
                 if leg is None or (direction, leg) in seen:
                     continue
                 seen.add((direction, leg))
@@ -180,15 +183,6 @@ def part_b(g, day_bars, scale, sr):
     return pd.DataFrame(trades)
 
 
-def day_ci(x, col, n=2000):
-    """Day-clustered bootstrap 95% CI of mean r_net."""
-    rng = np.random.default_rng(0)
-    g = x.groupby(x[col].dt.date).r_net.agg(["sum", "size"])
-    s, k = g["sum"].values, g["size"].values
-    m = [s[i].sum() / k[i].sum() for i in (rng.integers(0, len(g), len(g)) for _ in range(n))]
-    return np.percentile(m, [2.5, 97.5])
-
-
 def summarize_b(t):
     rows = []
     for scope, df in [("all symbols", t), ("indexes", t[t["index"]])]:
@@ -197,7 +191,7 @@ def summarize_b(t):
                            ("node + S/R", df.node_in_zone & df.sr_in_zone),
                            ("neither", ~df.node_in_zone & ~df.sr_in_zone)]:
             x = df[mask]
-            lo, hi = day_ci(x, "entry_time") if len(x) > 1 else (np.nan, np.nan)
+            lo, hi = day_ci(x, "entry_time")
             rows.append(dict(scope=scope, filter=name, trades=len(x), win_rate=(x.r > 0).mean(),
                              target_rate=(x.exit_how == "target").mean(),
                              mean_r_net=x.r_net.mean(), ci95_low=lo, ci95_high=hi))

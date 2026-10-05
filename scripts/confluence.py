@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 from load import TABLES
-from node_claims import INDEXES, NAMED, prepare, typical_range
+from node_claims import INDEXES, NAMED, prepare, scale_at, typical_range
 
 OUT = TABLES
 NEAR = 0.25            # confluence tolerance, in typical ranges
@@ -80,7 +80,7 @@ def first_touch(b, t, lvl, x):
 
 
 def touch_test(g, day_bars, scale, sr):
-    g = g.join(scale.rename("scale"), on="symbol")
+    g = g.join(scale.rename("scale"), on=["symbol", "date"])
     g["dz"] = (g.strike - g.spot).abs() / g.spot / g.scale
     c = (g[(g.dz > 0.5) & (g.dz < 3)].sort_values("time_et")
          .drop_duplicates(["symbol", "date", "strike"]))
@@ -105,11 +105,13 @@ def touch_test(g, day_bars, scale, sr):
         at = b[b.time_et >= t]
         if at.empty:
             continue
-        spot = at.close.iloc[0]
+        spot, sc = at.close.iloc[0], scale_at(scale, sym, d)
+        if np.isnan(sc):
+            continue
         for k, px in lv:
-            if k > t or not 0.5 < abs(px - spot) / spot / scale[sym] < 3:
+            if k > t or not 0.5 < abs(px - spot) / spot / sc < 3:
                 continue
-            held = first_touch(b, t, px, 0.5 * scale[sym] * px)
+            held = first_touch(b, t, px, 0.5 * sc * px)
             if held is not None:
                 rows.append((sym in INDEXES, "price_sr_only", "", True, held))
     t = pd.DataFrame(rows, columns=["index", "node", "sign", "confluence", "held"])
@@ -120,7 +122,7 @@ def touch_test(g, day_bars, scale, sr):
 def rug_split(sr, scale):
     tr = pd.read_csv(OUT / "rug_trades.csv", parse_dates=["map_time"])
     tr["confluence"] = [near_sr(sr, r.symbol, r.map_time.normalize(), r.map_time, r.level,
-                                NEAR * scale[r.symbol] * r.level) for r in tr.itertuples()]
+                                NEAR * scale_at(scale, r.symbol, r.map_time) * r.level) for r in tr.itertuples()]
     return (tr.groupby(["setup", "confluence"])
             .agg(trades=("r", "size"), win_rate=("r", lambda s: (s > 0).mean()),
                  mean_r_net=("r_net", "mean"), total_r_net=("r_net", "sum")).reset_index())

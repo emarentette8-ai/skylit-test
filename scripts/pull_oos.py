@@ -14,6 +14,7 @@ Writes data/raw/oos/{gamma_snapshots,price_bars_1min}.parquet.
 import argparse
 import json
 import os
+import threading
 import time
 import urllib.parse
 import urllib.request
@@ -40,20 +41,32 @@ class Budget(Exception):
 
 class Client:
     def __init__(self, floor):
-        self.floor, self.balance = floor, None
+        self.floor, self.balance, self.reserved = floor, None, 0
+        self.lock = threading.Lock()
         key = os.environ.get("SKYLIT_API_KEY")
         self.headers = {"Authorization": f"Bearer {key}"} if key else {}
 
     def get(self, url, params, cost):
-        if self.balance is not None and self.balance - cost < self.floor:
-            raise Budget(f"balance {self.balance} would drop below floor {self.floor}")
+        # reserve the cost before calling, so parallel calls cannot overshoot the floor
+        with self.lock:
+            if self.balance is not None and self.balance - self.reserved - cost < self.floor:
+                raise Budget(f"balance {self.balance} would drop below floor {self.floor}")
+            self.reserved += cost
+        try:
+            return self._fetch(url, params)
+        finally:
+            with self.lock:
+                self.reserved -= cost
+
+    def _fetch(self, url, params):
         req = urllib.request.Request(f"{url}?{urllib.parse.urlencode(params)}", headers=self.headers)
         for attempt in range(5):
             try:
                 with urllib.request.urlopen(req, timeout=60) as r:
                     left = r.headers.get("X-Credits-Remaining")
                     if left is not None:
-                        self.balance = int(left)
+                        with self.lock:
+                            self.balance = int(left) if self.balance is None else min(self.balance, int(left))
                     return json.load(r)
             except urllib.error.HTTPError as e:
                 if e.code in (429, 500, 502, 503, 504):

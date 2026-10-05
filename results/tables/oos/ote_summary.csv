@@ -1,11 +1,11 @@
 scope,filter,trades,win_rate,target_rate,mean_r_net,ci95_low,ci95_high
-all symbols,all OTE trades,1196,0.3645,0.1321,-0.1925,-0.2797,-0.11
-all symbols,node in zone,365,0.3973,0.1397,-0.1166,-0.2801,0.0482
-all symbols,S/R in zone,408,0.3701,0.098,-0.2325,-0.3639,-0.1008
-all symbols,node + S/R,135,0.4148,0.0963,-0.1312,-0.3875,0.1391
-all symbols,neither,558,0.3513,0.1434,-0.198,-0.3139,-0.0809
-indexes,all OTE trades,290,0.3897,0.1172,-0.1694,-0.3542,0.0251
-indexes,node in zone,163,0.4294,0.1595,-0.0161,-0.2766,0.246
-indexes,S/R in zone,100,0.41,0.1,-0.121,-0.424,0.2005
-indexes,node + S/R,67,0.4179,0.1343,0.0174,-0.3438,0.4123
-indexes,neither,94,0.3191,0.0745,-0.3536,-0.5869,-0.1175
+all symbols,all OTE trades,1196,0.3637,0.1338,-0.2094,-0.2973,-0.1198
+all symbols,node in zone,366,0.3962,0.1421,-0.1142,-0.2775,0.0538
+all symbols,S/R in zone,409,0.3692,0.1002,-0.2608,-0.3989,-0.1174
+all symbols,node + S/R,137,0.4088,0.1022,-0.1316,-0.3929,0.1451
+all symbols,neither,558,0.3495,0.1452,-0.2152,-0.3239,-0.1034
+indexes,all OTE trades,293,0.3891,0.1229,-0.1746,-0.3756,0.0148
+indexes,node in zone,164,0.4329,0.1646,-0.0067,-0.2693,0.2455
+indexes,S/R in zone,105,0.419,0.1143,-0.1002,-0.4291,0.2297
+indexes,node + S/R,69,0.4203,0.1449,0.028,-0.3508,0.4252
+indexes,neither,93,0.3011,0.0753,-0.4046,-0.6416,-0.1603

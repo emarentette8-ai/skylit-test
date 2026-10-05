@@ -38,3 +38,9 @@ its own; we report all five whatever the outcome.
 
 The expected nulls held: node touches hold about as often as ordinary strikes,
 and gamma regime does not change the next hour's range.
+
+## Audit note (Oct 5 2026)
+
+A look-ahead in the typical-range scaling was removed (see `results/FINDINGS.md`) and
+`verdict.csv` was rebuilt. All five still fail out of sample. H3 now shows "passed" by
+0.002R (-0.042 vs -0.044) only because its rule had no minimum margin; it is treated as failed.

@@ -1,25 +1,25 @@
 trades_from,alignment,filter,trades,win_rate,mean_r_net
-Rug + Reverse Rug,setup,all trades,101,0.5149,0.185
-Rug + Reverse Rug,setup,aligned 2 of 3,27,0.4444,0.108
-Rug + Reverse Rug,setup,all 3,2,0.5,0.842
-Rug + Reverse Rug,setup,not aligned,74,0.5405,0.2131
-Rug + Reverse Rug,king,all trades,101,0.5149,0.185
-Rug + Reverse Rug,king,aligned 2 of 3,54,0.537,0.2247
-Rug + Reverse Rug,king,all 3,12,0.6667,0.1028
-Rug + Reverse Rug,king,not aligned,47,0.4894,0.1393
-Rug family incl. controls,setup,all trades,442,0.3982,-0.0209
-Rug family incl. controls,setup,aligned 2 of 3,32,0.4375,0.0987
-Rug family incl. controls,setup,all 3,2,0.5,0.842
-Rug family incl. controls,setup,not aligned,410,0.3951,-0.0302
-Rug family incl. controls,king,all trades,442,0.3982,-0.0209
-Rug family incl. controls,king,aligned 2 of 3,224,0.4152,-0.0093
-Rug family incl. controls,king,all 3,67,0.403,-0.1881
-Rug family incl. controls,king,not aligned,218,0.3807,-0.0328
-OTE on indexes,setup,all trades,138,0.4348,-0.3103
+Rug + Reverse Rug,setup,all trades,96,0.4583,-0.0693
+Rug + Reverse Rug,setup,aligned 2 of 3,21,0.4762,0.2586
+Rug + Reverse Rug,setup,all 3,4,0.75,1.1539
+Rug + Reverse Rug,setup,not aligned,75,0.4533,-0.1611
+Rug + Reverse Rug,king,all trades,96,0.4583,-0.0693
+Rug + Reverse Rug,king,aligned 2 of 3,49,0.4898,0.1563
+Rug + Reverse Rug,king,all 3,8,0.5,-0.0071
+Rug + Reverse Rug,king,not aligned,47,0.4255,-0.3045
+Rug family incl. controls,setup,all trades,346,0.3988,-0.0945
+Rug family incl. controls,setup,aligned 2 of 3,23,0.4783,0.2279
+Rug family incl. controls,setup,all 3,4,0.75,1.1539
+Rug family incl. controls,setup,not aligned,323,0.3932,-0.1175
+Rug family incl. controls,king,all trades,346,0.3988,-0.0945
+Rug family incl. controls,king,aligned 2 of 3,181,0.3757,-0.14
+Rug family incl. controls,king,all 3,45,0.3556,-0.299
+Rug family incl. controls,king,not aligned,165,0.4242,-0.0446
+OTE on indexes,setup,all trades,126,0.4206,-0.3824
 OTE on indexes,setup,aligned 2 of 3,3,1.0,0.388
 OTE on indexes,setup,all 3,0,,
-OTE on indexes,setup,not aligned,135,0.4222,-0.3259
-OTE on indexes,king,all trades,138,0.4348,-0.3103
-OTE on indexes,king,aligned 2 of 3,83,0.4458,-0.0781
-OTE on indexes,king,all 3,24,0.5833,0.3396
-OTE on indexes,king,not aligned,55,0.4182,-0.6608
+OTE on indexes,setup,not aligned,123,0.4065,-0.4011
+OTE on indexes,king,all trades,126,0.4206,-0.3824
+OTE on indexes,king,aligned 2 of 3,73,0.4384,-0.0781
+OTE on indexes,king,all 3,21,0.5238,0.2875
+OTE on indexes,king,not aligned,53,0.3962,-0.8014

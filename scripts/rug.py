@@ -24,7 +24,8 @@ import numpy as np
 import pandas as pd
 
 from load import TABLES
-from node_claims import prepare, typical_range
+from node_claims import prepare, scale_at, typical_range
+from stats import day_ci
 
 OUT = TABLES
 SYMBOLS = ("SPY", "QQQ", "SPXW")
@@ -101,13 +102,15 @@ def run():
         at = b[b.time_et >= t]
         if at.empty:
             continue
-        spot = at.close.iloc[0]
-        for setup, lvl in classify(s, spot, WINDOW * scale[sym]):
+        spot, sc = at.close.iloc[0], scale_at(scale, sym, t)
+        if np.isnan(sc):
+            continue
+        for setup, lvl in classify(s, spot, WINDOW * sc):
             key = (sym, setup)
             if busy_until.get(key, pd.Timestamp.min) > t:
                 continue
             tr = simulate(b, t, t + pd.Timedelta(minutes=30), lvl,
-                          short=setup.startswith("rug"), scale=scale[sym])
+                          short=setup.startswith("rug"), scale=sc)
             if tr:
                 busy_until[key] = pd.Timestamp(tr["exit_time"])
                 trades.append(dict(symbol=sym, map_time=t, setup=setup, level=lvl, **tr))
@@ -115,21 +118,10 @@ def run():
 
 
 def summarize(tr):
-    rng = np.random.default_rng(0)
-
-    def boot(df):
-        days = df.groupby(df.map_time.dt.date).r_net.sum()
-        n = df.groupby(df.map_time.dt.date).size()
-        means = []
-        for _ in range(2000):
-            idx = rng.integers(0, len(days), len(days))
-            means.append(days.values[idx].sum() / n.values[idx].sum())
-        return np.percentile(means, [2.5, 97.5])
-
     rows = []
     for keys, df in [(("all", s), d) for s, d in tr.groupby("setup")] + \
                     [((sym, s), d) for (sym, s), d in tr.groupby(["symbol", "setup"])]:
-        lo, hi = boot(df)
+        lo, hi = day_ci(df)
         rows.append(dict(symbol=keys[0], setup=keys[1], trades=len(df), days=df.map_time.dt.date.nunique(),
                          win_rate=(df.r > 0).mean(), target_rate=(df.exit_how == "target").mean(),
                          mean_r=df.r.mean(), mean_r_net=df.r_net.mean(), total_r_net=df.r_net.sum(),

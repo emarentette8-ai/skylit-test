@@ -18,7 +18,7 @@ import numpy as np
 import pandas as pd
 
 from load import TABLES
-from node_claims import prepare, typical_range
+from node_claims import prepare, scale_at, typical_range
 from rug import WINDOW, classify
 
 OUT = TABLES
@@ -35,8 +35,10 @@ def map_views(g, day_bars, scale):
         at = b[b.time_et >= t]
         if at.empty:
             continue
-        spot = at.close.iloc[0]
-        setups = {name for name, _ in classify(s, spot, WINDOW * scale[sym])}
+        spot, sc = at.close.iloc[0], scale_at(scale, sym, t)
+        if np.isnan(sc):
+            continue
+        setups = {name for name, _ in classify(s, spot, WINDOW * sc)}
         king = s.loc[s.node_type == "king", "strike"].iloc[0]
         rows.append(dict(symbol=sym, time_et=t, rug="rug" in setups,
                          reverse_rug="reverse_rug" in setups, king_side=np.sign(king - spot)))

@@ -33,13 +33,29 @@ def prepare():
     return g, p, day_bars
 
 
+LOOKBACK, MIN_DAYS = 20, 5
+
+
 def typical_range(p):
-    """Median 30-minute high-low range as a fraction of price, per symbol."""
+    """Typical 30-minute high-low range as a fraction of price, per (symbol, date).
+
+    Trailing: the median of the previous LOOKBACK days' daily medians, so a day
+    is scaled only with information from before it. Days with fewer than
+    MIN_DAYS prior days have no value and are skipped by the studies.
+    """
     def one(v):
         r = (v.set_index("time_et").resample("30min")
              .agg({"high": "max", "low": "min", "close": "last"}).dropna())
         return ((r.high - r.low) / r.close).median()
-    return p.groupby("symbol").apply(one)
+    daily = p.groupby(["symbol", "date"]).apply(one)
+    return (daily.groupby(level="symbol", group_keys=False)
+            .apply(lambda s: s.rolling(LOOKBACK, min_periods=MIN_DAYS).median().shift(1))
+            .dropna())
+
+
+def scale_at(scale, sym, date):
+    """Typical range for a symbol on a date, NaN if there is not enough history."""
+    return scale.get((sym, pd.Timestamp(date).normalize()), np.nan)
 
 
 def snapshot_table(g, day_bars, scale):
@@ -51,6 +67,9 @@ def snapshot_table(g, day_bars, scale):
         fut = b[b.time_et >= t]
         if len(fut) < 30:
             continue
+        sc = scale_at(scale, sym, t)
+        if np.isnan(sc):
+            continue
         spot = fut.close.iloc[0]
         king = s.loc[s.node_type == "king"].iloc[0]
         near = s[(s.strike - spot).abs() / spot < 0.02]
@@ -59,7 +78,7 @@ def snapshot_table(g, day_bars, scale):
             symbol=sym, time_et=t, spot=spot, close=b.close.iloc[-1],
             king=king.strike, king_gamma=king.net_gamma,
             local_net=near.net_gamma.sum(), local_abs=near.net_gamma.abs().sum(),
-            range60=(nxt.high.max() - nxt.low.min()) / spot / scale[sym]))
+            range60=(nxt.high.max() - nxt.low.min()) / spot / sc))
     r = pd.DataFrame(rows)
     r["index"] = r.symbol.isin(INDEXES)
     return r
@@ -98,7 +117,7 @@ def touches(g, day_bars, scale):
     Levels are taken from the first snapshot of the day that lists the strike
     0.5-3 typical ranges from price. Up to 3 touches per level; a break ends it.
     """
-    g = g.join(scale.rename("scale"), on="symbol")
+    g = g.join(scale.rename("scale"), on=["symbol", "date"])
     g["dz"] = (g.strike - g.spot).abs() / g.spot / g.scale
     c = (g[(g.dz > 0.5) & (g.dz < 3)].sort_values("time_et")
          .drop_duplicates(["symbol", "date", "strike"]))
