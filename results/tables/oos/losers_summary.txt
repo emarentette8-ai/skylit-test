@@ -1,0 +1,10 @@
+trades: jul-sep 5836 (58% losers), oct-jun 5031 (57% losers)
+
+CONSISTENT factors (same worst bucket both periods, >= 3 pts above the rest, n >= 100):
+                        factor worst bucket  jul-sep loss  oct-jun loss  jul-sep vs rest  oct-jun vs rest
+              filter: ote_zone           no         0.545         0.543            0.065            0.043
+stop distance (typical ranges)         <0.4         0.680         0.762            0.112            0.203
+
+shuffled outcomes: 0.3 consistent factors on average, 95th pct 1; real 2
+
+how losers exit: jul-sep {'stop': 0.83, 'close': 0.14, 'target': 0.03}, oct-jun {'stop': 0.82, 'close': 0.13, 'target': 0.05}

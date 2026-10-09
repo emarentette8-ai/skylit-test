@@ -96,6 +96,21 @@ Tables: `results/tables/oos/filters_eval.csv`, `filters_combos.csv`.
 - **Not modelled:** stop slippage (stops fill exactly), option spreads (cost is a
   0.02% share cost), and map latency (maps every 30 minutes).
 
+## What losing trades have in common (Oct 9 2026, `results/tables/oos/losers_summary.txt`)
+
+All setups pooled: 5,836 trades (58% losers) and 5,031 (57%). A factor counts if the
+same bucket has the highest loss rate in both periods, >= 3 points above the rest,
+>= 100 trades. Shuffled outcomes give 0.3 such factors on average; real: 2.
+
+- **Tight stops** (< 0.4 typical 30-minute ranges): 68% / 76% losers, -0.29R / -0.67R.
+  Almost all are OTE trades on small swing legs. Part is cost (a fixed 0.02% is a big
+  share of a small risk: gross -0.06R vs net -0.29R in Jul-Sep), but in Oct-Jun they
+  lose even before costs (-0.28R gross).
+- Not in an OTE zone: 54% vs 48-50% losers, but the OTE-zone group is small (77/108).
+- 82-83% of losers exit at the stop; 13-14% drift to the close.
+- Not consistent: hour, weekday, side, index vs stock, with/against the day's move,
+  move already done, day range so far.
+
 ## Not yet tested
 
 - **Front-expiry (0DTE) maps.** Every test used the 5-expiration net. Skylit's own guide

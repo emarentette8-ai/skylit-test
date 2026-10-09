@@ -1,0 +1,103 @@
+factor,bucket,period,n,loss_rate,vs_rest,mean_r
+hour,10,jul-sep,1162,0.5878,0.0114,-0.0622
+hour,11,jul-sep,851,0.5805,0.0022,-0.139
+hour,12,jul-sep,937,0.5859,0.0087,-0.0747
+hour,13,jul-sep,869,0.5823,0.0043,-0.131
+hour,14,jul-sep,967,0.5688,-0.0118,-0.0727
+hour,15,jul-sep,1050,0.5667,-0.0146,-0.1426
+hour,10,oct-jun,943,0.5673,-0.0021,-0.0658
+hour,11,oct-jun,798,0.5677,-0.0017,-0.0706
+hour,12,oct-jun,854,0.6112,0.0508,-0.1776
+hour,13,oct-jun,810,0.558,-0.0132,-0.1476
+hour,14,oct-jun,902,0.5277,-0.0504,-0.0784
+hour,15,oct-jun,724,0.587,0.021,-0.2282
+weekday,Fri,jul-sep,1664,0.5319,-0.0655,-0.082
+weekday,Mon,jul-sep,984,0.6098,0.0374,-0.1326
+weekday,Thu,jul-sep,1176,0.591,0.0154,-0.1006
+weekday,Tue,jul-sep,896,0.6004,0.0258,-0.1224
+weekday,Wed,jul-sep,1116,0.5905,0.0147,-0.0891
+weekday,Fri,oct-jun,1152,0.5417,-0.0355,-0.068
+weekday,Mon,oct-jun,964,0.556,-0.0161,-0.1514
+weekday,Thu,oct-jun,986,0.6014,0.0402,-0.1766
+weekday,Tue,oct-jun,940,0.5702,0.0014,-0.0823
+weekday,Wed,oct-jun,989,0.5804,0.0141,-0.1514
+side,long,jul-sep,3205,0.591,0.0273,-0.1308
+side,short,jul-sep,2631,0.5637,-0.0273,-0.0666
+side,long,oct-jun,2681,0.5684,-0.0013,-0.1305
+side,short,oct-jun,2350,0.5698,0.0013,-0.1174
+index vs stock,index/ETF,jul-sep,816,0.5613,-0.0202,-0.1726
+index vs stock,stock,jul-sep,5020,0.5815,0.0202,-0.0903
+index vs stock,index/ETF,oct-jun,2414,0.5597,-0.0181,-0.1518
+index vs stock,stock,oct-jun,2617,0.5778,0.0181,-0.099
+setup,edge_fade,jul-sep,3093,0.5128,-0.1402,-0.0475
+setup,king_reject,jul-sep,72,0.5694,-0.0093,-0.3042
+setup,ote,jul-sep,2002,0.6449,0.1008,-0.1549
+setup,rug,jul-sep,96,0.5729,-0.0058,-0.0693
+setup,twin_nodes,jul-sep,573,0.7051,0.1402,-0.1899
+setup,edge_fade,oct-jun,2923,0.5135,-0.1326,-0.1032
+setup,king_reject,oct-jun,189,0.545,-0.025,-0.2065
+setup,ote,oct-jun,1196,0.6572,0.1156,-0.2094
+setup,rug,oct-jun,348,0.658,0.0956,-0.0737
+setup,twin_nodes,oct-jun,375,0.6507,0.0882,-0.0231
+stop distance (typical ranges),0.4-0.6,jul-sep,710,0.6451,0.0756,-0.0866
+stop distance (typical ranges),0.6-1,jul-sep,4104,0.5577,-0.0704,-0.0811
+stop distance (typical ranges),<0.4,jul-sep,541,0.6802,0.1119,-0.2935
+stop distance (typical ranges),>1,jul-sep,481,0.5447,-0.037,-0.0861
+stop distance (typical ranges),0.4-0.6,oct-jun,435,0.6713,0.1119,-0.1633
+stop distance (typical ranges),0.6-1,oct-jun,3716,0.5444,-0.0944,-0.0763
+stop distance (typical ranges),<0.4,oct-jun,256,0.7617,0.203,-0.6739
+stop distance (typical ranges),>1,oct-jun,624,0.5657,-0.0038,-0.1577
+vs the day's move so far,against,jul-sep,3260,0.5748,-0.0086,-0.0965
+vs the day's move so far,flat,jul-sep,5,0.2,-0.379,0.6112
+vs the day's move so far,with,jul-sep,2571,0.5842,0.0099,-0.11
+vs the day's move so far,against,oct-jun,2697,0.5762,0.0154,-0.1305
+vs the day's move so far,flat,oct-jun,5,0.2,-0.3694,1.4548
+vs the day's move so far,with,oct-jun,2329,0.5616,-0.0139,-0.1206
+move done since open (typical ranges),1-3,jul-sep,2432,0.5773,-0.0023,-0.0895
+move done since open (typical ranges),<1,jul-sep,1691,0.5766,-0.0029,-0.0945
+move done since open (typical ranges),>3,jul-sep,1713,0.5826,0.0056,-0.1266
+move done since open (typical ranges),1-3,oct-jun,2149,0.5565,-0.0219,-0.1024
+move done since open (typical ranges),<1,oct-jun,1544,0.5907,0.0312,-0.1861
+move done since open (typical ranges),>3,oct-jun,1338,0.5643,-0.0065,-0.0884
+day range so far (typical ranges),3-6,jul-sep,3636,0.5674,-0.0299,-0.0844
+day range so far (typical ranges),<3,jul-sep,1044,0.6025,0.029,-0.1575
+day range so far (typical ranges),>6,jul-sep,1156,0.5926,0.0173,-0.1064
+day range so far (typical ranges),3-6,oct-jun,2758,0.5638,-0.0116,-0.1125
+day range so far (typical ranges),<3,oct-jun,1353,0.5765,0.0102,-0.1636
+day range so far (typical ranges),>6,oct-jun,920,0.5739,0.0059,-0.1021
+filter: sr,no,jul-sep,3435,0.5674,-0.0274,-0.0656
+filter: sr,yes,jul-sep,2401,0.5948,0.0274,-0.1537
+filter: sr,no,oct-jun,3062,0.5653,-0.0096,-0.0914
+filter: sr,yes,oct-jun,1969,0.5749,0.0096,-0.1756
+filter: supply_demand,no,jul-sep,5519,0.5778,-0.0152,-0.102
+filter: supply_demand,yes,jul-sep,317,0.5931,0.0152,-0.0995
+filter: supply_demand,no,oct-jun,4783,0.5683,-0.0164,-0.1193
+filter: supply_demand,yes,oct-jun,248,0.5847,0.0164,-0.221
+filter: king_ahead,no,jul-sep,2843,0.5821,0.0068,-0.1223
+filter: king_ahead,yes,jul-sep,2993,0.5753,-0.0068,-0.0825
+filter: king_ahead,no,oct-jun,2472,0.5684,-0.0001,-0.1062
+filter: king_ahead,yes,oct-jun,2547,0.5685,0.0001,-0.1398
+filter: king_negative,no,jul-sep,3802,0.5829,0.0121,-0.1133
+filter: king_negative,yes,jul-sep,2034,0.5708,-0.0121,-0.0804
+filter: king_negative,no,oct-jun,2881,0.5703,0.0043,-0.1146
+filter: king_negative,yes,oct-jun,2138,0.5659,-0.0043,-0.1349
+filter: level_not_king,no,jul-sep,2051,0.5427,-0.003,-0.0797
+filter: level_not_king,yes,jul-sep,1783,0.5457,0.003,-0.0678
+filter: level_not_king,no,oct-jun,1988,0.5438,0.0045,-0.0836
+filter: level_not_king,yes,oct-jun,1847,0.5393,-0.0045,-0.1131
+filter: trinity_2of3,no,jul-sep,334,0.5689,0.0212,-0.2718
+filter: trinity_2of3,yes,jul-sep,367,0.5477,-0.0212,-0.1268
+filter: trinity_2of3,no,oct-jun,970,0.5918,0.0558,-0.168
+filter: trinity_2of3,yes,oct-jun,1000,0.536,-0.0558,-0.1244
+filter: ote_zone,no,jul-sep,3757,0.5454,0.0649,-0.0737
+filter: ote_zone,yes,jul-sep,77,0.4805,-0.0649,-0.0986
+filter: ote_zone,no,oct-jun,3727,0.5428,0.0428,-0.0979
+filter: ote_zone,yes,oct-jun,108,0.5,-0.0428,-0.0948
+filter: roll_with,no,jul-sep,4391,0.5803,0.0066,-0.0908
+filter: roll_with,yes,jul-sep,1445,0.5737,-0.0066,-0.1355
+filter: roll_with,no,oct-jun,3499,0.5765,0.0265,-0.1308
+filter: roll_with,yes,oct-jun,1520,0.55,-0.0265,-0.1058
+filter: gap_toward,no,jul-sep,4639,0.5667,-0.0582,-0.0739
+filter: gap_toward,yes,jul-sep,1197,0.6249,0.0582,-0.21
+filter: gap_toward,no,oct-jun,4130,0.5639,-0.0288,-0.1155
+filter: gap_toward,yes,oct-jun,901,0.5927,0.0288,-0.1649

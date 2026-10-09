@@ -45,8 +45,8 @@ MIN_N = 20
 DIR = {"long": 1, "short": -1, "long@floor": 1, "short@ceiling": -1}
 
 
-def load_trades():
-    T = lambda f, **kw: pd.read_csv(TABLES / f, **kw)
+def load_trades(base=TABLES, extra=()):
+    T = lambda f, **kw: pd.read_csv(base / f, **kw)
     out = []
     r = T("rug_trades.csv", parse_dates=["map_time", "entry_time"])
     r = r[~r.setup.str.endswith("control")]
@@ -65,7 +65,7 @@ def load_trades():
                         entry_time=k.map_time, t_dec=k.map_time - pd.Timedelta(minutes=30)))
     w = T("twin_nodes_trades.csv", parse_dates=["map_time", "entry_time"])
     out.append(w.assign(family="twin_nodes", direction=w.side.map(DIR), level=w.near, t_dec=w.map_time))
-    cols = ["family", "symbol", "t_dec", "entry_time", "direction", "entry", "level", "r", "r_net"]
+    cols = ["family", "symbol", "t_dec", "entry_time", "direction", "entry", "level", "r", "r_net", *extra]
     return pd.concat([x[cols] for x in out], ignore_index=True)
 
 
