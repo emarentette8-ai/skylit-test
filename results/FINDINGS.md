@@ -128,6 +128,19 @@ positive; no setup is above 0 in both periods. The King-share rule alone did not
 (R unchanged, index win rate lower). Three of the four rules came from these same
 trades, so the improvement is in-sample.
 
+## Pre-registered strategy search (Oct 9 2026, `results/search_plan.md`)
+
+Fixed rule: single stocks only when >= 2 of the SPXW/SPY/QQQ Kings are on the trade's
+side. Greedy search over 510 candidate conditions on Jul-Sep 2026 + Oct 2025-Jan 2026,
+holdout Feb-Jun 2026 opened once (`results/tables/oos/search_holdout.txt`).
+
+- Chosen: enter 10:00-11:00; price already 1-3 typical ranges from the open; no twin
+  nodes; skip days whose range so far exceeds 6 typical ranges.
+- Design: -0.02R (228 trades) and +0.18R (103). Holdout: **+0.001R** (167 trades, 53%
+  win, 95% -0.19..+0.21). Fail: the search did not find an edge.
+- The index-agreement rule for stocks is not stable: agreeing indexes were worse in
+  Jul-Sep (-0.14R vs -0.04R) and better in Oct-Jun (-0.05R vs -0.15R).
+
 ## Not yet tested
 
 - **Front-expiry (0DTE) maps.** Every test used the 5-expiration net. Skylit's own guide

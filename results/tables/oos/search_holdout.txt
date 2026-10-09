@@ -1,0 +1,3 @@
+rules: hour == 10; move done == 1-3; setup != twin_nodes; day range so far != >6
+holdout, fixed rule only: 2106 trades on 103 days, win 51.3%, mean -0.051R (95% -0.108..+0.011), positive days 35%, total -106.7R
+holdout, final rules: 167 trades on 76 days, win 53.3%, mean +0.001R (95% -0.186..+0.207), positive days 43%, total +0.1R
