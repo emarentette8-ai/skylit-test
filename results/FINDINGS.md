@@ -111,6 +111,23 @@ same bucket has the highest loss rate in both periods, >= 3 points above the res
 - Not consistent: hour, weekday, side, index vs stock, with/against the day's move,
   move already done, day range so far.
 
+## No-entry rules from the loser analysis (Oct 9 2026, `results/tables/oos/no_entry.csv`)
+
+Skip: entries at/after 15:00; index maps where the King holds a top-quarter share of
+total |gamma| (cut-off 0.23, set on Jul-Sep); stops < 0.4 typical range; trading
+toward an unfilled gap. All setups pooled:
+
+| | Jul-Sep | Oct-Jun |
+|---|---|---|
+| All trades | 44.5% win, -0.10R (5,836) | 46.6% win, -0.12R (5,031) |
+| All rules | 45.4% win, -0.06R (3,470) | 47.5% win, -0.08R (3,178) |
+| Same number removed at random | -0.10R | -0.12R |
+
+The rules remove losers better than chance (+0.05R in both periods) but nothing turns
+positive; no setup is above 0 in both periods. The King-share rule alone did not help
+(R unchanged, index win rate lower). Three of the four rules came from these same
+trades, so the improvement is in-sample.
+
 ## Not yet tested
 
 - **Front-expiry (0DTE) maps.** Every test used the 5-expiration net. Skylit's own guide

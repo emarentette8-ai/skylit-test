@@ -16,4 +16,5 @@ done
 python3 filters.py report > /dev/null
 python3 bias_checks.py > /dev/null
 python3 losers.py > /dev/null
+python3 no_entry.py > /dev/null
 python3 oos_verdict.py

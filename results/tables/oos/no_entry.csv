@@ -1,0 +1,39 @@
+period,scope,case,trades,win_rate,mean_r_net,ci95_low,ci95_high
+jul-sep,all setups,all trades,5836,0.4452,-0.1019,-0.137,-0.068
+jul-sep,all setups,without late (1050 skipped),4786,0.4384,-0.0929,-0.1347,-0.0513
+jul-sep,all setups,without king_heavy (183 skipped),5653,0.4394,-0.0987,-0.1331,-0.065
+jul-sep,all setups,without tight_stop (541 skipped),5295,0.455,-0.0823,-0.1191,-0.0462
+jul-sep,all setups,without gap_toward (1197 skipped),4639,0.4581,-0.0739,-0.1207,-0.0272
+jul-sep,all setups,ALL RULES (2366 skipped),3470,0.4542,-0.0562,-0.1127,-0.0016
+jul-sep,all setups,random removal of 2366,3470,,-0.1028,-0.1275,-0.0789
+jul-sep,all setups,"ALL RULES, edge_fade",2195,0.5171,-0.0146,-0.0766,0.0457
+jul-sep,all setups,"ALL RULES, king_reject",38,0.5526,-0.2487,-0.4788,-0.0084
+jul-sep,all setups,"ALL RULES, ote",765,0.3503,-0.0973,-0.2176,0.0287
+jul-sep,all setups,"ALL RULES, rug",48,0.4167,-0.2138,-0.5534,0.155
+jul-sep,all setups,"ALL RULES, twin_nodes",424,0.3113,-0.1618,-0.2995,-0.0237
+jul-sep,indexes,all trades,701,0.5592,-0.1958,-0.2817,-0.1112
+jul-sep,indexes,without late (95 skipped),606,0.5495,-0.1885,-0.2784,-0.0957
+jul-sep,indexes,without king_heavy (183 skipped),518,0.5367,-0.1949,-0.297,-0.0953
+jul-sep,indexes,without tight_stop (33 skipped),668,0.5659,-0.1709,-0.2517,-0.0889
+jul-sep,indexes,without gap_toward (181 skipped),520,0.5942,-0.1457,-0.2525,-0.0336
+jul-sep,indexes,ALL RULES (367 skipped),334,0.5719,-0.1351,-0.2593,-0.0039
+jul-sep,indexes,random removal of 367,334,,-0.1958,-0.2752,-0.1225
+oct-jun,all setups,all trades,5031,0.4659,-0.1244,-0.1622,-0.0861
+oct-jun,all setups,without late (724 skipped),4307,0.4674,-0.1069,-0.1496,-0.0641
+oct-jun,all setups,without king_heavy (420 skipped),4611,0.458,-0.1233,-0.162,-0.0837
+oct-jun,all setups,without tight_stop (256 skipped),4775,0.476,-0.0949,-0.134,-0.0551
+oct-jun,all setups,without gap_toward (901 skipped),4130,0.4709,-0.1155,-0.1615,-0.0691
+oct-jun,all setups,ALL RULES (1853 skipped),3178,0.4751,-0.0776,-0.1293,-0.025
+oct-jun,all setups,random removal of 1853,3178,,-0.1239,-0.1494,-0.1016
+oct-jun,all setups,"ALL RULES, edge_fade",2045,0.5296,-0.0856,-0.1352,-0.0355
+oct-jun,all setups,"ALL RULES, king_reject",133,0.4887,-0.257,-0.4005,-0.1078
+oct-jun,all setups,"ALL RULES, ote",496,0.3871,-0.0057,-0.1526,0.1389
+oct-jun,all setups,"ALL RULES, rug",202,0.3317,-0.0695,-0.2989,0.181
+oct-jun,all setups,"ALL RULES, twin_nodes",302,0.3411,-0.0679,-0.2272,0.1008
+oct-jun,indexes,all trades,1973,0.5058,-0.1468,-0.2007,-0.092
+oct-jun,indexes,without late (244 skipped),1729,0.5049,-0.1375,-0.1967,-0.0779
+oct-jun,indexes,without king_heavy (420 skipped),1553,0.4932,-0.1497,-0.2085,-0.0902
+oct-jun,indexes,without tight_stop (56 skipped),1917,0.507,-0.1417,-0.1948,-0.0876
+oct-jun,indexes,without gap_toward (381 skipped),1592,0.5195,-0.1278,-0.192,-0.0587
+oct-jun,indexes,ALL RULES (856 skipped),1117,0.5121,-0.115,-0.1942,-0.0327
+oct-jun,indexes,random removal of 856,1117,,-0.1471,-0.1921,-0.1074
