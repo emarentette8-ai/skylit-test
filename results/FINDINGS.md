@@ -70,14 +70,31 @@ supply/demand zones (`scripts/supply_demand.py`). Rule fixed before the run: a f
 works if it raises both win rate and mean R in both periods with >= 20 trades.
 Tables: `results/tables/oos/filters_eval.csv`, `filters_combos.csv`.
 
-- 14 filter/setup pairs passed. Random filters with the same firing rates pass ~10
-  on average and >= 14 in 9.5% of runs, so as a group this is barely above chance.
+- 14 filter/setup pairs passed. Random filters pass ~10 on average. With one random
+  draw per underlying trade (the non-King rug targets share entries), random filters
+  reach >= 14 passes in 26.5% of runs, so the passes are consistent with chance
+  (`scripts/bias_checks.py`; an earlier version drew per family and gave 9.5%).
 - Supply/demand fired on 3-10% of trades and did not help consistently (it passed
   only for OTE; pooled across setups it lowered the Oct-Jun win rate, 43% vs 47%).
 - Stacking raises win rates but not reliably R. Best stacks: Rug + S/R + negative
   King 63% / +0.48R (19 trades) and 42% / +0.13R (59); King rejection + negative King
   + Trinity 61% / -0.04R (18) and 63% / -0.06R (64). No stack has an R interval above 0.
 - Both periods were used to choose, so none of this is confirmed; it needs new data.
+
+## Bias checks (Oct 9 2026, `results/tables/oos/bias_checks.txt`)
+
+- **Outliers:** the best stack (Rug + S/R + negative King) has median R +0.03 and
+  -1.06, and its mean falls to +0.03 / -0.02 without its 3 best trades. The profit is
+  three trades, not a pattern. QQQ is 39-53% of its trades.
+- **Direction:** some filters pick more longs (Trinity: 59-61% longs vs 44-48%), but
+  most uplifts appear within longs and within shorts, and pooled longs did no better
+  than shorts in either period, so market drift is not the main driver.
+- **Fills:** entering at the next bar's open instead of the signal close changes
+  results by <= 0.02R; no trade would already be past its stop.
+- **Universe:** Jul-Sep's 50 tickers split 23 up / 27 down (median -2%); Oct-Jun's 10
+  rose (median +9.5%). Both lists were chosen recently (hindsight selection).
+- **Not modelled:** stop slippage (stops fill exactly), option spreads (cost is a
+  0.02% share cost), and map latency (maps every 30 minutes).
 
 ## Not yet tested
 

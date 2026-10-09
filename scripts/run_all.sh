@@ -14,4 +14,5 @@ for set in "" oos; do
   SKYLIT_DATA=$set python3 filters.py flags > /dev/null
 done
 python3 filters.py report > /dev/null
+python3 bias_checks.py > /dev/null
 python3 oos_verdict.py

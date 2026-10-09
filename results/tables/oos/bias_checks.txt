@@ -1,0 +1,39 @@
+== 1. Direction: long share and uplift within longs / shorts
+           family        filter jul-sep long% with/without  jul-sep uplift longs  jul-sep uplift shorts oct-jun long% with/without  oct-jun uplift longs  oct-jun uplift shorts
+      king_reject king_negative                    57%/73%                 0.260                  0.034                    55%/60%                 0.168                  0.074
+      king_reject  trinity_2of3                    67%/65%                 0.066                    NaN                    61%/51%                 0.189                  0.140
+   nonking_rug_3R            sr                    51%/47%                -0.047                  0.169                    47%/45%                 0.001                  0.089
+   nonking_rug_3R    king_ahead                    55%/38%                 0.215                  0.048                    50%/39%                 0.080                 -0.026
+ nonking_rug_king            sr                    55%/54%                -0.123                  0.374                    56%/49%                 0.003                  0.011
+ nonking_rug_king king_negative                    53%/58%                 0.105                 -0.058                    53%/46%                -0.120                  0.173
+nonking_rug_swing  trinity_2of3                    53%/36%                 0.763                 -0.134                    49%/45%                -0.157                  0.172
+              ote supply_demand                    54%/53%                 0.229                 -0.169                    43%/52%                -0.036                  0.121
+              ote    king_ahead                    60%/42%                 0.087                  0.149                    58%/39%                 0.232                 -0.139
+              rug            sr                    41%/45%                 0.213                  0.329                    50%/47%                 0.243                 -0.081
+              rug    king_ahead                    46%/41%                 1.093                  0.306                    48%/48%                 0.243                  0.157
+              rug king_negative                    48%/38%                 0.741                  0.139                    51%/45%                 0.005                  0.107
+              rug  trinity_2of3                    53%/34%                 0.832                  0.227                    50%/46%                 0.040                  0.253
+           pooled  trinity_2of3                    61%/48%                 0.227                  0.075                    59%/44%                 0.143                 -0.058
+jul-sep: all pooled trades, longs -0.131R (n=3205), shorts -0.067R (n=2631)
+oct-jun: all pooled trades, longs -0.130R (n=2681), shorts -0.117R (n=2350)
+
+== 2. Outliers and concentration in the best stacks
+rug + sr + king_negative [jul-sep] n=19 mean +0.478R  median +0.033R  mean without best 3 +0.029R  top symbol QQQ 53%  longs 53%
+rug + sr + king_negative [oct-jun] n=59 mean +0.131R  median -1.057R  mean without best 3 -0.017R  top symbol QQQ 39%  longs 47%
+king_reject + king_negative + trinity_2of3 [jul-sep] n=18 mean -0.037R  median +0.080R  mean without best 3 -0.325R  top symbol SPY 44%  longs 67%
+king_reject + king_negative + trinity_2of3 [oct-jun] n=64 mean -0.061R  median +0.086R  mean without best 3 -0.146R  top symbol QQQ 41%  longs 59%
+
+== 3. Random-filter null with one draw per underlying trade
+real passes 14; shared-draw random filters: mean 9.6, 95th pct 21, share >= real 0.265
+
+== 4. Entry at the next bar's open instead of the signal close
+jul-sep rug_trades: signal-close -0.069R  next-open -0.055R  (n=96, 0 would already be through the stop)
+jul-sep edges_trades: signal-close -0.048R  next-open -0.046R  (n=3093, 0 would already be through the stop)
+jul-sep rug_targets_trades: signal-close -0.006R  next-open -0.001R  (n=680, 0 would already be through the stop)
+oct-jun rug_trades: signal-close -0.074R  next-open -0.071R  (n=348, 0 would already be through the stop)
+oct-jun edges_trades: signal-close -0.103R  next-open -0.102R  (n=2923, 0 would already be through the stop)
+oct-jun rug_targets_trades: signal-close -0.018R  next-open -0.018R  (n=484, 0 would already be through the stop)
+
+== 5. Buy-and-hold of the traded symbols
+jul-sep: 50 symbols, median -2.0%, rose 23, fell 27; best PLTR +56%, worst CRWD -66%
+oct-jun: 10 symbols, median +9.5%, rose 7, fell 3; best IWM +24%, worst MSFT -28%
