@@ -62,6 +62,23 @@ Trinity, roll states, edge sign/size, H1-H5). At that count, a few "significant"
 are expected by chance; only results that repeat in both periods are listed above as
 repeating, and none is yet a tested edge.
 
+## All filters on all setups, plus supply/demand (Oct 9 2026)
+
+`scripts/filters.py` tags every trade from every study (rug, non-King rug x3 targets,
+OTE, edge fade, King rejection, twin nodes) with nine filters, including new
+supply/demand zones (`scripts/supply_demand.py`). Rule fixed before the run: a filter
+works if it raises both win rate and mean R in both periods with >= 20 trades.
+Tables: `results/tables/oos/filters_eval.csv`, `filters_combos.csv`.
+
+- 14 filter/setup pairs passed. Random filters with the same firing rates pass ~10
+  on average and >= 14 in 9.5% of runs, so as a group this is barely above chance.
+- Supply/demand fired on 3-10% of trades and did not help consistently (it passed
+  only for OTE; pooled across setups it lowered the Oct-Jun win rate, 43% vs 47%).
+- Stacking raises win rates but not reliably R. Best stacks: Rug + S/R + negative
+  King 63% / +0.48R (19 trades) and 42% / +0.13R (59); King rejection + negative King
+  + Trinity 61% / -0.04R (18) and 63% / -0.06R (64). No stack has an R interval above 0.
+- Both periods were used to choose, so none of this is confirmed; it needs new data.
+
 ## Not yet tested
 
 - **Front-expiry (0DTE) maps.** Every test used the 5-expiration net. Skylit's own guide

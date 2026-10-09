@@ -10,5 +10,8 @@ for set in "" oos; do
     echo "-- $s"
     SKYLIT_DATA=$set python3 "$s.py" > /dev/null
   done
+  echo "-- filters flags"
+  SKYLIT_DATA=$set python3 filters.py flags > /dev/null
 done
+python3 filters.py report > /dev/null
 python3 oos_verdict.py

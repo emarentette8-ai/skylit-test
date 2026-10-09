@@ -102,3 +102,20 @@ def test_classify_finds_rug_and_skips_unnamed_ceiling():
     assert ("rug", 101) in classify(s, 100.2, 0.02)
     s.loc[s.strike == 101, "node_type"] = "normal"
     assert not any(name == "rug" for name, _ in classify(s, 100.2, 0.02))
+
+
+def test_demand_zone_known_after_impulse_and_fresh_until_touched():
+    from supply_demand import fresh_zone, zones_for
+    # 5 flat bars (base 100.00-100.05), then a sharp rally, then a return into the base
+    path = [100.0] * 5 + [100.02] * 5 + list(np.linspace(100.1, 101.5, 10)) + [101.5] * 10 + [100.03] * 5
+    b = bars(path, spread=0.02)
+    z = [x for x in zones_for(b, 1.0) if x[1] == "demand"]
+    assert z, "a base followed by a rally must form a demand zone"
+    known, kind, lo, hi, first = z[0]
+    rally = b[b.close >= hi + 0.5]
+    assert known >= rally.time_et.iloc[0]                          # not known before the rally
+    assert first is not None and b.loc[b.time_et == first, "low"].iloc[0] <= hi
+    sd = {("TST", DAY): z}
+    assert fresh_zone(sd, "TST", DAY, known, "demand", (lo + hi) / 2, 0.0)
+    assert not fresh_zone(sd, "TST", DAY, first + pd.Timedelta(minutes=1), "demand", (lo + hi) / 2, 0.0)
+    assert not fresh_zone(sd, "TST", DAY, known - pd.Timedelta(minutes=1), "demand", (lo + hi) / 2, 0.0)
