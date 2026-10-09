@@ -6,7 +6,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 for set in "" oos; do
   echo "== ${set:-watchlist}"
-  for s in node_claims rug confluence trade_features ote trinity edges king_reject; do
+  for s in node_claims rug confluence trade_features ote trinity edges king_reject rug_targets; do
     echo "-- $s"
     SKYLIT_DATA=$set python3 "$s.py" > /dev/null
   done
